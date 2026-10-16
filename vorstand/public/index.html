@@ -30,6 +30,8 @@
     h2 { font-size: 20px; margin: 36px 0 8px; }
     h3 { font-size: 16px; margin: 0 0 8px; }
     p { margin: 0 0 12px; }
+    ol { margin: 0 0 12px; padding-left: 1.4em; }
+    ol li { margin: 0 0 10px; }
     .muted { color: var(--muted); }
     .note {
       background: var(--info-bg);
@@ -131,14 +133,18 @@
   </table>
   <p class="muted">Die vierte Aufgabe ist die Brücke zur Automatisierung. Zuerst löst sie ein Mensch in der Oberfläche, danach die IT über die API oder das MCP.</p>
 
-  <h2>Beschlussvorlage für Sitzung zwei</h2>
-  <div class="card">
-    <p id="beschluss"></p>
-    <p class="muted">Wiedervorlage mit drei Spalten je Angebot: Platz in den Ranglisten, Punktzahl aus dem Test von 0 bis 100, Kosten über vier Jahre. Der Vorstand wählt daraus einen Piloten für eine Abteilung, parallel zum weiterlaufenden ProWinner.</p>
-  </div>
-
-  <h2>Wenn eine Frage im Test nicht sichtbar wird</h2>
-  <p>Dafür reicht ein kurzer Fragebogen mit denselben acht Fragen an jeden Anbieter in der engeren Wahl: Auftragsverarbeitungsvertrag, Serverstandort, Preis bei 1400 Mitgliedern über vier Jahre, enthaltene API, fertiges MCP, Bestandsmeldung Badischer Sportbund, Dauer der Datenübernahme aus ProWinner, Format des Exports bei Vertragsende. Antworten aus dem Testkonto wiegen in der Sitzung schwerer als Texte von der Website.</p>
+  <h2>Fragen an den Anbieter</h2>
+  <p>Was im Testkonto nicht sichtbar wird, geht in dieser Fassung an jeden Anbieter der engeren Wahl. Eine Antwort aus dem Testkonto wiegt schwerer als ein Text von der Website.</p>
+  <ol>
+    <li>Wir sind der TV Neuenburg 1926 e.V., etwa 1400 Mitglieder, Abteilungen Turnen, Handball, Tennis, Schwimmen, Judo und Ski/Wandern. Schicken Sie uns den Auftragsverarbeitungsvertrag, bevor wir echte Mitglieder importieren, und nennen Sie darin, welche Daten Sie für uns verarbeiten.</li>
+    <li>In welchem Land und bei welchem Rechenzentrumsbetreiber liegen Mitglieder, SEPA-Mandate und Belege?</li>
+    <li>Was kostet das Angebot für etwa 1400 Mitglieder über vier Jahre, als eine Summe aus Lizenzen, Einrichtung, Schulung und den Gebühren der Zahlungswege?</li>
+    <li>Ist die API in diesem Preis enthalten? Können wir damit Mitglieder lesen und schreiben, und ist die Dokumentation ohne Anmeldung und ohne gesonderte Freischaltung lesbar?</li>
+    <li>Gibt es eine fertige Anbindung für einen KI-Assistenten, und sieht dieser Assistent nur das, was die angemeldete Rolle sehen darf?</li>
+    <li>Erzeugen Sie aus dem Mitgliederbestand die Datei für die Bestandsmeldung an den Badischen Sportbund, und zählt eine Person in zwei Abteilungen in dieser Meldung einmal?</li>
+    <li>Wie viele Werktage dauert die Übernahme unseres Bestands aus ProWinner, und wer ordnet dabei Abteilungen, Beitragssätze und Mandatsreferenzen zu?</li>
+    <li>In welchem Dateiformat erhalten wir bei Vertragsende Mitglieder, Abteilungen, Mandatsreferenzen und Belege, und innerhalb welcher Frist nach unserer Anforderung?</li>
+  </ol>
 
   <footer>Öffentliche Ansicht für den TV Neuenburg 1926 e.V. Gewichte bleiben in diesem Browser und werden nicht an einen Server gesendet.</footer>
 </main>
@@ -579,7 +585,6 @@ function areaBlock(area) {
 function render() {
   const sum = AREAS.reduce((total, area) => total + weights[area.id], 0);
   const result = overall();
-  const names = result.rows.slice(0, 3).map((offer) => offer.name).join(", ");
   localStorage.setItem("tvn-area-weights", JSON.stringify(weights));
   localStorage.setItem("tvn-checks", JSON.stringify(checks));
   localStorage.removeItem("tvn-sepa-min");
@@ -614,9 +619,6 @@ function render() {
     }).join("");
     document.getElementById("gesamt").innerHTML = `<div class="rank-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
   }
-  document.getElementById("beschluss").textContent = names
-    ? `Der Vorstand beauftragt die Prüfung der ersten drei der Gesamtliste: ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit der Punktzahl aus den Blöcken und der Vier-Jahres-Rechnung.`
-    : "Ohne Gewicht und ohne angehakte Merkmale bleibt die Gesamtliste leer. Der Vorstand setzt zuerst die Gewichte an den Blöcken.";
 }
 
 document.body.addEventListener("change", (event) => {
