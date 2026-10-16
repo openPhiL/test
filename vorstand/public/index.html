@@ -100,7 +100,7 @@
 
   <div class="note">
     <strong>Erster Schritt sind die Ranglisten.</strong>
-    Kasse, Geschäftsstelle und IT haken an, was sie wollen, und geben jedem Block ein Gewicht. Die Gesamtliste zählt diese Gewichte zusammen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+    Kasse, Geschäftsstelle und IT haken an, was sie wollen, und geben jedem Block ein Gewicht. Die Gesamtliste zählt diese Gewichte zusammen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Alle sechzehn geprüften Angebote stehen in jeder Rangliste. Schnittstellen zählen im Block API und Automatisierung. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
   <h2>Erster Schritt: Ranglisten</h2>
@@ -118,44 +118,6 @@
   <div class="bar" id="bar" aria-hidden="true"></div>
   <div id="sum-warn"></div>
   <div id="gesamt"></div>
-
-  <h2>Angeschaut, nicht in der Wertung</h2>
-  <p>Diese sechs Angebote sind am 16. Oktober 2026 auf den öffentlichen Seiten geprüft. Sie stehen nicht in den Ranglisten oben. Der Grund steht in der letzten Spalte.</p>
-  <table>
-    <thead><tr><th>Angebot</th><th>Was belegt ist</th><th>Warum es nicht in der Wertung steht</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>Clubway</td>
-        <td>Vereinssoftware im Browser für Sportvereine. REST-API mit öffentlicher Dokumentation, Schlüssel hängen an einer Rolle. SEPA-Mandate, auch mit anderem Kontoinhaber. DOSB-XML für die Bestandserhebung. Server bei AWS in Frankfurt. Kontakt in Aachen, die Firma dahinter ist Taikala Oy in Finnland.</td>
-        <td>API und SEPA-Lastschrift sind kostenpflichtige Zusatzmodule, nicht der Grundumfang. Eine fertige KI-Anbindung ist nicht beschrieben. Der Badische Sportbund ist nicht namentlich genannt.</td>
-      </tr>
-      <tr>
-        <td>cadaiungo VereinsCloud</td>
-        <td>Browser, Abteilungen, Familienantrag, SEPA-XML mit Mandat, App, Hosting in Deutschland. Die Bestandsmeldung nennt BSB Nord, BSB Freiburg, dazu DOSB-XML und weitere Landesverbände.</td>
-        <td>Eine allgemeine Schnittstelle, über die Mitglieder gelesen und geschrieben werden, ist auf den gesichteten Seiten nicht belegt. Für die Meldung an den Verband ist das der passendste Kandidat, für die Automatisierung bleibt er außen vor.</td>
-      </tr>
-      <tr>
-        <td>vereinster</td>
-        <td>Browser, PAIN.008 mit Gläubiger-ID, Rücklastschrift und Mahnwesen ab dem Pro-Tarif. DOSB-XML im Tarif Organisation. Hosting bei Hetzner in Deutschland, AVV digital.</td>
-        <td>Der veröffentlichte Tarif Organisation endet bei 1.000 Mitgliedern, der Verein hat etwa 1.400. Eine API ist auf den Funktions- und Preisseiten nicht als Leistung belegt.</td>
-      </tr>
-      <tr>
-        <td>WISO MeinVerein Web</td>
-        <td>Web-Version von Buhl, deutsch, mit SEPA-Mandat, Vorabankündigung und Rücklastschrift. Server in Deutschland.</td>
-        <td>Der Support hat am 25. Juni 2024 geschrieben, ein Zugriff per API und eine Anbindung anderer Anwendungen sei nicht möglich.</td>
-      </tr>
-      <tr>
-        <td>ClubDesk</td>
-        <td>Vereinssoftware im Browser aus der Schweiz, SEPA in den Bezahlversionen, eine Schnittstelle zu nuLiga. Telefonischer Support in den Bezahlversionen.</td>
-        <td>Eine öffentliche REST-Schnittstelle ist nicht belegt. Im Forum des Anbieters liegt der Wunsch nach einer API seit Jahren, ein Termin dafür ist nicht genannt.</td>
-      </tr>
-      <tr>
-        <td>SportMember</td>
-        <td>Dänisches Angebot, auch unter dem Namen Holdsport. Öffentliche API für Teams, Anwesenheiten und Profile, Anmeldung mit Benutzername und Passwort.</td>
-        <td>Gebaut für Training und Mannschaften, nicht für die deutsche Vereinskasse. SEPA-Datei für die Hausbank und Bestandsmeldung an den Badischen Sportbund sind nicht belegt.</td>
-      </tr>
-    </tbody>
-  </table>
 
   <h2>Dieselben fünf Aufgaben in jedem Testkonto</h2>
   <p>Datenbasis ist ein anonymisierter Auszug von etwa 30 Mitgliedern aus ProWinner: Familien, zwei Abteilungen, ein offener Beitrag, ein beendeter Status. Die Uhr stoppt, wenn die Person die Hotline braucht.</p>
@@ -197,7 +159,13 @@ const OFFERS = [
   ["sewobe", "SEWOBE"],
   ["vereinonline", "VereinOnline"],
   ["kurabu", "Kurabu"],
-  ["bundaris", "Bundaris"]
+  ["bundaris", "Bundaris"],
+  ["clubway", "Clubway"],
+  ["vereinscloud", "VereinsCloud"],
+  ["vereinster", "vereinster"],
+  ["meinverein", "WISO MeinVerein Web"],
+  ["clubdesk", "ClubDesk"],
+  ["sportmember", "SportMember"]
 ];
 const AREAS = [
   {
@@ -222,21 +190,21 @@ const AREAS = [
       ["vorab", "Vorabankündigung"]
     ],
     yes: {
-      glaeubiger: ["easyverein", "webling", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      mandat: ["webling", "sewobe", "ledenboek", "kurabu", "vereinonline", "bundaris", "campai"],
-      eltern: ["webling", "sewobe"],
-      datei: ["easyverein", "webling", "sewobe", "vereinonline", "bundaris", "kurabu", "ledenboek"],
+      glaeubiger: ["easyverein", "webling", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinster", "clubdesk"],
+      mandat: ["webling", "sewobe", "ledenboek", "kurabu", "vereinonline", "bundaris", "campai", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk"],
+      eltern: ["webling", "sewobe", "clubway"],
+      datei: ["easyverein", "webling", "sewobe", "vereinonline", "bundaris", "kurabu", "ledenboek", "clubway", "vereinscloud", "vereinster", "clubdesk"],
       format08: ["easyverein", "bundaris"],
       folge: ["bundaris"],
-      einmal: ["webling"],
-      sammel: ["easyverein", "webling", "sewobe", "vereinonline"],
-      direkt: ["sewobe", "vereinonline"],
+      einmal: ["webling", "meinverein", "sportmember"],
+      sammel: ["easyverein", "webling", "sewobe", "vereinonline", "clubway", "vereinster", "meinverein"],
+      direkt: ["sewobe", "vereinonline", "clubway", "meinverein"],
       rueck: ["sewobe", "kurabu", "easyverein", "campai"],
       gebuehr: ["sewobe", "campai", "kurabu"],
-      auszug: ["webling", "bundaris", "sewobe", "kurabu", "ledenboek", "vereinonline"],
+      auszug: ["webling", "bundaris", "sewobe", "kurabu", "ledenboek", "vereinonline", "clubway", "meinverein", "clubdesk"],
       familie: ["bundaris"],
       pruefung: ["bundaris", "sewobe"],
-      vorab: ["bundaris", "vereinonline"]
+      vorab: ["bundaris", "vereinonline", "meinverein"]
     },
     notes: {
       "bundaris:glaeubiger": "pain.008 setzt die Gläubiger-ID voraus. Ein eigenes Eingabefeld ist auf der Funktionsseite nicht beschrieben.",
@@ -245,7 +213,23 @@ const AREAS = [
       "webling:rueck": "Beschrieben ist ein manuelles Umbuchen und eine neue Rechnung, keine automatische Zuordnung.",
       "campai:datei": "Belegt sind Lastschrift und Rücklastschrift-Assistent. Das Dateiformat PAIN.008 ist nicht genannt.",
       "orgo:datei": "Zahlungen laufen über Stripe. Eine PAIN.008-Datei für die Hausbank ist nicht belegt.",
-      "digitalmembers:datei": "Belegt sind QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt."
+      "digitalmembers:datei": "Belegt sind QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt.",
+      "clubway:glaeubiger": "Die Hilfe nennt ein Feld für die Gläubiger-ID. SEPA-Lastschrift ist ein kostenpflichtiges Zusatzmodul.",
+      "clubway:datei": "SEPA-XML zum Download, das Format ist je Bank wählbar. pain.008.001.08 ist nicht genannt. Zusätzlich gibt es EBICS-Direktversand.",
+      "clubway:auszug": "CAMT.053 lässt sich importieren und den Rechnungen zuordnen.",
+      "vereinscloud:datei": "SEPA-XML per Klick und Mandate mit Datum und Status sind beschrieben. Schemaversion und Gläubiger-ID sind nicht genannt.",
+      "vereinster:datei": "PAIN.008 mit Gläubiger-ID. Der Lastschriftlauf wird im Online-Banking hochgeladen.",
+      "meinverein:datei": "Lastschriften werden direkt aus der Software angestoßen, ohne separate XML-Datei bei der Bank.",
+      "meinverein:einmal": "Neben dem regelmäßigen Beitragseinzug lassen sich Einzelrechnungen per Lastschrift einziehen.",
+      "meinverein:auszug": "Kontoumsätze lassen sich abrufen und mit Belegen verknüpfen. Ein CAMT-Dateiname ist nicht genannt.",
+      "meinverein:vorab": "Die Lastschriftvorankündigung geht auf Wunsch automatisch heraus.",
+      "clubdesk:datei": "In den Bezahlversionen: SEPA-Datei zum Download und Upload im E-Banking. Die Schemaversion ist nicht genannt.",
+      "clubdesk:glaeubiger": "Die Hilfe nennt ein Feld für die Gläubiger-ID. Im Gratistarif gibt es keine SEPA-Lastschrift.",
+      "clubdesk:mandat": "Die Mandatsreferenz vergibt der Verein selbst.",
+      "clubdesk:auszug": "CAMT.053 und CAMT.054 lassen sich importieren und Rechnungen zuordnen.",
+      "sportmember:datei": "SEPA-Lastschrift im Euro-Raum ist beschrieben. Eine PAIN.008-Datei, eine Gläubiger-ID und eine Mandatsreferenz sind nicht genannt.",
+      "sportmember:einmal": "Die Hilfe nennt einmalige Beiträge, feste Beiträge und Monatsbeiträge.",
+      "sportmember:mandat": "SportMember erstellt das SEPA-Lastschriftmandat. Eine Mandatsreferenz als Feld ist nicht genannt."
     }
   },
   {
@@ -259,10 +243,10 @@ const AREAS = [
       ["verband", "Bestandsmeldung LSB/DOSB"]
     ],
     yes: {
-      abteilungen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      beitraege: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      familie: ["orgo", "easyverein", "sewobe", "kurabu", "bundaris"],
-      verband: ["easyverein", "webling", "campai", "kurabu"]
+      abteilungen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "sportmember"],
+      beitraege: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "sportmember"],
+      familie: ["orgo", "easyverein", "sewobe", "kurabu", "bundaris", "vereinscloud", "vereinster", "meinverein"],
+      verband: ["easyverein", "webling", "campai", "kurabu", "clubway", "vereinscloud", "vereinster", "meinverein"]
     },
     notes: {
       "ledenboek:abteilungen": "Gruppen und Ausschüsse sind beschrieben. Einen Familienzahler nennt die gesichtete Seite nicht.",
@@ -272,7 +256,18 @@ const AREAS = [
       "easyverein:verband": "DOSB-Statistik und LSB-Export als XML. Der Badische Sportbund ist nicht namentlich genannt.",
       "webling:verband": "LSB/DOSB-Export für die Mitgliedermeldung in Deutschland.",
       "campai:verband": "LSB-Export mit einem Klick. Der Badische Sportbund ist nicht namentlich genannt.",
-      "kurabu:verband": "Geführte Bestandserhebung, nach Angabe des Anbieters im Format jedes Landessportbunds. Den Badischen Sportbund im Test einmal erzeugen."
+      "kurabu:verband": "Geführte Bestandserhebung, nach Angabe des Anbieters im Format jedes Landessportbunds. Den Badischen Sportbund im Test einmal erzeugen.",
+      "clubway:abteilungen": "Die API spricht von Gruppen und Untergruppen. Das Wort Abteilung steht auf den gesichteten Seiten nicht.",
+      "clubway:verband": "DOSB-XML für die Bestandserhebung. Der Badische Sportbund ist nicht namentlich genannt.",
+      "vereinscloud:verband": "BSB Nord und BSB Freiburg sind namentlich genannt, dazu DOSB-XML.",
+      "vereinscloud:familie": "Eine Familien-Anmeldung ist beschrieben.",
+      "vereinster:abteilungen": "Mehrere Abteilungen je Mitglied sind beschrieben, zum Beispiel Fußball und Schwimmen. Der Tarif Organisation endet bei 1.000 Mitgliedern.",
+      "vereinster:familie": "Familienverknüpfungen und Bezugspersonen sind beschrieben. Ob ein Zahler mehrere Personen bündelt, im Test prüfen.",
+      "vereinster:verband": "DOSB-XML nur im Tarif Organisation. Der veröffentlichte Tarif endet bei 1.000 Mitgliedern, der Verein hat etwa 1.400.",
+      "meinverein:familie": "Beitragssätze für Familien und die Zahlungsart „ein anderes Mitglied“.",
+      "meinverein:verband": "A- und B-Meldungen als Excel oder XML. Der Badische Sportbund ist nicht namentlich genannt.",
+      "sportmember:abteilungen": "Ein Abteilungswechsel ist beschrieben. Ob mehrere Sportabteilungen parallel laufen, im Test prüfen.",
+      "clubdesk:verband": "Belegt ist eine Schnittstelle zu nuLiga. Eine Bestandsmeldung an den LSB oder DOSB ist nicht belegt."
     }
   },
   {
@@ -286,10 +281,10 @@ const AREAS = [
       ["lesen", "API-Schlüssel nur lesen"]
     ],
     yes: {
-      rollen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      sparte: ["easyverein", "sewobe", "kurabu"],
-      portal: ["webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      lesen: ["ledenboek", "orgo", "easyverein", "digitalmembers", "kurabu"]
+      rollen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      sparte: ["easyverein", "sewobe", "kurabu", "vereinscloud"],
+      portal: ["webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      lesen: ["ledenboek", "orgo", "easyverein", "digitalmembers", "kurabu", "clubway"]
     },
     notes: {
       "easyverein:sparte": "In der Dachverbandslösung sehen Abteilungsverwalter die anderen Abteilungen nicht. Jede Abteilung braucht eine eigene Lizenz.",
@@ -298,7 +293,14 @@ const AREAS = [
       "digitalmembers:portal": "Mitglieder schlagen Änderungen vor. Sie gehen erst nach Freigabe live.",
       "easyverein:lesen": "Ein API-Schlüssel erbt die Rechte seiner Administratorgruppe. Eine nur lesende Gruppe ergibt einen nur lesenden Schlüssel.",
       "campai:lesen": "Die Entwicklerseite schreibt, die API stellt alle Funktionen ohne Einschränkung bereit.",
-      "bundaris:rollen": "Beschrieben sind Funktionen und, für größere Organisationen, Sub-Mandanten. Eine feine Abteilungsrolle steht auf der Sportseite nicht."
+      "bundaris:rollen": "Beschrieben sind Funktionen und, für größere Organisationen, Sub-Mandanten. Eine feine Abteilungsrolle steht auf der Sportseite nicht.",
+      "clubway:lesen": "Der API-Schlüssel folgt der Rolle. Die Sichtbarkeit einzelner Felder lässt sich einschränken.",
+      "clubway:portal": "Mitglieder pflegen Adresse und Bankverbindung selbst, in der App oder im Browser.",
+      "vereinscloud:sparte": "Jeder Abteilung lassen sich eigene Verantwortliche mit eigenen Rechten zuweisen.",
+      "vereinscloud:portal": "Im Self-Service sieht und korrigiert jedes Mitglied seine Daten selbst.",
+      "vereinscloud:rollen": "Rollen mit Berechtigungen pro Modul. Eine Account-Grenze ist nicht genannt.",
+      "meinverein:rollen": "Eigene Rollen gibt es in den größeren Tarifen.",
+      "clubdesk:rollen": "Rollen und Funktionen steuern den Datenzugriff. Im Gratistarif sind drei feste Rechtegruppen beschrieben."
     }
   },
   {
@@ -310,13 +312,15 @@ const AREAS = [
       ["hilfe", "Hilfe auf Deutsch"]
     ],
     yes: {
-      oberflaeche: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"]
+      oberflaeche: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "clubdesk", "sportmember"]
     },
     notes: {
       "ledenboek:oberflaeche": "Deutsche Oberfläche. Herkunft und Buchhaltungslogik sind niederländisch.",
       "orgo:oberflaeche": "Deutsche Seiten sind vorhanden. Eine deutsche Hilfe zum Lastschriftlauf ist nicht belegt.",
-      "digitalmembers:hilfe": "Deutsche Dokumentation. Fachsprache daneben auch schweizerisch, etwa QR-Rechnung."
+      "digitalmembers:hilfe": "Deutsche Dokumentation. Fachsprache daneben auch schweizerisch, etwa QR-Rechnung.",
+      "meinverein:hilfe": "Die Funktionsseiten sind deutsch. Ein öffentliches Hilfecenter ist dort nicht belegt.",
+      "sportmember:hilfe": "Es gibt ein deutsches Support-Center mit Anleitungen, zum Beispiel zum Beitragseinzug."
     }
   },
   {
@@ -329,13 +333,15 @@ const AREAS = [
       ["app", "Eigene App"]
     ],
     yes: {
-      browser: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      gleichzeitig: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      app: ["easyverein", "campai", "kurabu"]
+      browser: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      gleichzeitig: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      app: ["easyverein", "campai", "kurabu", "clubway", "vereinscloud", "meinverein", "sportmember"]
     },
     notes: {
       "webling:app": "Webling nennt die Arbeit im Browser und ausdrücklich keine eigene App.",
-      "ledenboek:browser": "Webanwendung, Server bei Hetzner in Deutschland."
+      "ledenboek:browser": "Webanwendung, Server bei Hetzner in Deutschland.",
+      "vereinster:app": "Eine eigene App ist auf den Seiten des Anbieters nicht als Leistung genannt.",
+      "clubdesk:app": "ClubDesk nennt die Arbeit im Browser. Eine native App ist nicht belegt."
     }
   },
   {
@@ -347,8 +353,8 @@ const AREAS = [
       ["betreiber", "Rechenzentrumsbetreiber genannt"]
     ],
     yes: {
-      standort: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "bundaris"],
-      betreiber: ["ledenboek", "digitalmembers", "vereinonline"]
+      standort: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      betreiber: ["ledenboek", "digitalmembers", "vereinonline", "clubway", "vereinster", "meinverein", "sportmember"]
     },
     notes: {
       "ledenboek:betreiber": "Server bei Hetzner in Deutschland.",
@@ -360,7 +366,13 @@ const AREAS = [
       "vereinonline:betreiber": "Hosting in Deutschland bei Ionos.",
       "bundaris:standort": "Daten in deutschen Rechenzentren. Der Betreiber ist nicht genannt.",
       "sewobe:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht.",
-      "kurabu:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht."
+      "kurabu:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht.",
+      "clubway:betreiber": "Server bei AWS in Frankfurt. Die Firma ist Taikala Oy in Finnland, der Kontakt sitzt in Aachen.",
+      "vereinscloud:standort": "Hosting in Deutschland. Der Betreiber des Rechenzentrums ist nicht genannt.",
+      "vereinster:betreiber": "Server bei Hetzner in Deutschland.",
+      "meinverein:betreiber": "Eigene Rechenzentren der Buhl Data Service GmbH in Deutschland, am Hauptsitz.",
+      "clubdesk:standort": "Hosting in Zürich. Der Betreiber des Rechenzentrums ist nicht genannt.",
+      "sportmember:betreiber": "Produktion bei Hetzner in Gunzenhausen. Verschlüsselte Sicherungen bei AWS in Irland. Einzelne Unterauftragnehmer sitzen in den USA."
     }
   },
   {
@@ -374,9 +386,9 @@ const AREAS = [
       ["anhaenge", "Anhänge oder Belege mit dabei"]
     ],
     yes: {
-      mitglieder: ["ledenboek", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "kurabu", "bundaris"],
-      buchhaltung: ["ledenboek", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      api: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline"],
+      mitglieder: ["ledenboek", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "kurabu", "bundaris", "vereinscloud", "vereinster"],
+      buchhaltung: ["ledenboek", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris", "vereinster", "meinverein", "sportmember"],
+      api: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "clubway", "sportmember"],
       anhaenge: ["ledenboek", "webling", "campai", "digitalmembers", "kurabu"]
     },
     notes: {
@@ -399,7 +411,19 @@ const AREAS = [
       "bundaris:mitglieder": "Die Mitgliederliste lässt sich jederzeit als Excel exportieren.",
       "bundaris:buchhaltung": "DATEV-Export für den Steuerberater, Kontenrahmen an SKR42 orientiert.",
       "bundaris:api": "Die JSON-API nennt Termine, News und Statistik. Mitglieder und Buchungen gehen per Excel, CSV und DATEV.",
-      "orgo:api": "Die API liest Mitglieder, Zahlungen und Events. Ein Dateiformat für den kompletten Ausstieg ist nicht belegt."
+      "orgo:api": "Die API liest Mitglieder, Zahlungen und Events. Ein Dateiformat für den kompletten Ausstieg ist nicht belegt.",
+      "vereinscloud:mitglieder": "Mitgliederlisten als PDF oder CSV.",
+      "vereinscloud:api": "Eine allgemeine Mitglieder-API ist auf den gesichteten Seiten nicht belegt.",
+      "vereinster:mitglieder": "Export als CSV oder Excel.",
+      "vereinster:buchhaltung": "Die Sportseite nennt SKR42 und DATEV-Standard 2025. Das genaue Exportdateiformat im Test prüfen.",
+      "vereinster:api": "Eine API ist auf den Funktions- und Preisseiten nicht als Leistung belegt.",
+      "meinverein:buchhaltung": "DATEV-Export, Kontenrahmen SKR 49.",
+      "meinverein:api": "Der Support hat am 25. Juni 2024 geschrieben, ein Zugriff per API sei nicht möglich.",
+      "clubway:api": "Mitglieder lassen sich über die REST-API lesen und, für den Vereinsbesitzer, anlegen.",
+      "clubdesk:api": "Belegt ist eine Schnittstelle zu nuLiga. Ein Mitgliederabzug über eine öffentliche REST-API ist nicht belegt.",
+      "sportmember:mitglieder": "Belegt ist der Export der eigenen Profildaten. Eine Mitgliederliste des ganzen Vereins als Datei ist nicht genannt.",
+      "sportmember:buchhaltung": "Zahlungen lassen sich in Buchhaltungssysteme exportieren. DATEV oder ein Kontenrahmen sind nicht genannt.",
+      "sportmember:api": "Teammitglieder über HTTP-Basic-Auth. Kein vereinweiter Mitgliederexport in der gelesenen API-Beschreibung."
     }
   },
   {
@@ -418,14 +442,14 @@ const AREAS = [
       ["sandbox", "Testumgebung"]
     ],
     yes: {
-      doku: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "kurabu", "bundaris"],
-      lesen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline"],
-      schreiben: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline"],
+      doku: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "kurabu", "bundaris", "clubway", "sportmember"],
+      lesen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "clubway", "sportmember"],
+      schreiben: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "clubway", "sportmember"],
       webhooks: ["orgo", "campai", "digitalmembers"],
       spec: ["ledenboek", "campai", "digitalmembers"],
       mcp: ["ledenboek", "orgo"],
       nocode: ["orgo", "webling", "digitalmembers", "vereinonline", "bundaris"],
-      rechte: ["ledenboek", "orgo", "easyverein", "digitalmembers", "vereinonline", "kurabu"],
+      rechte: ["ledenboek", "orgo", "easyverein", "digitalmembers", "vereinonline", "kurabu", "clubway"],
       sandbox: ["ledenboek", "webling"]
     },
     notes: {
@@ -449,7 +473,17 @@ const AREAS = [
       "kurabu:doku": "Öffentliche API in der Beta. Dokumentiert sind vor allem News, Abteilungen, Teams und Orte.",
       "kurabu:lesen": "Eine Mitgliederliste ist in der öffentlichen API nicht belegt.",
       "bundaris:doku": "Die öffentliche JSON-API nennt Termine, News und Statistik. Der API-Zugang steht in den höheren Tarifen.",
-      "bundaris:nocode": "WordPress-Plugin und iframe-Widgets, daneben die JSON-API."
+      "bundaris:nocode": "WordPress-Plugin und iframe-Widgets, daneben die JSON-API.",
+      "clubway:doku": "Öffentliche REST-Dokumentation. Die API ist ein kostenpflichtiges Zusatzmodul.",
+      "clubway:schreiben": "Mitglieder anlegen geht für den Vereinsbesitzer. Ändern schaltet der Support je Schlüssel frei.",
+      "clubway:rechte": "Der Schlüssel hängt an der Rolle. Die Sichtbarkeit einzelner Felder lässt sich einschränken.",
+      "sportmember:doku": "Öffentliche HTTP-API für Teams, Anwesenheiten und Profile. Anmeldung mit Benutzername und Passwort, keine OpenAPI-Spezifikation.",
+      "sportmember:lesen": "Die gelesene API listet Teammitglieder. Einen vereinweiten Mitgliederexport beschreibt sie nicht.",
+      "sportmember:schreiben": "Profile lassen sich aktualisieren. Der Zugang ist HTTP-Basic-Auth, kein eingeschränkter Schlüssel.",
+      "vereinscloud:doku": "Eine allgemeine Mitglieder-API ist auf den gesichteten Seiten nicht belegt.",
+      "vereinster:doku": "Eine API ist auf den Funktions- und Preisseiten nicht als Leistung belegt.",
+      "meinverein:doku": "Der Support hat am 25. Juni 2024 geschrieben, ein Zugriff per API und eine Anbindung anderer Anwendungen sei nicht möglich.",
+      "clubdesk:doku": "Belegt ist eine Schnittstelle zu nuLiga. Eine öffentliche REST-API ist nicht belegt. Der Forenwunsch hat keinen Termin."
     }
   },
   {
@@ -466,11 +500,11 @@ const AREAS = [
       ["schulung", "Schulung oder Einführung"]
     ],
     yes: {
-      deutsch: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
-      telefon: ["easyverein", "sewobe", "vereinonline", "kurabu", "digitalmembers", "ledenboek"],
+      deutsch: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember"],
+      telefon: ["easyverein", "sewobe", "vereinonline", "kurabu", "digitalmembers", "ledenboek", "clubway", "meinverein", "clubdesk"],
       zeiten: ["easyverein", "sewobe", "ledenboek"],
-      mail: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "ledenboek", "orgo"],
-      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      mail: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "ledenboek", "orgo", "clubway", "vereinster", "meinverein"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "clubdesk", "sportmember"],
       antwort: ["easyverein", "kurabu", "bundaris", "ledenboek"],
       schulung: ["sewobe", "ledenboek"]
     },
@@ -493,7 +527,16 @@ const AREAS = [
       "bundaris:antwort": "E-Mail-Support: 48 Stunden im Einstieg, 24 Stunden in den mittleren Tarifen, priorisierte Tickets im Enterprise-Tarif.",
       "ledenboek:deutsch": "Die Supportseite ist niederländisch. Telefon werktags 9 bis 17 Uhr, ohne Warteschlange.",
       "ledenboek:mail": "Eine Person antwortet innerhalb eines Werktags. Außerhalb der Telefonzeit und im Urlaub nur per E-Mail.",
-      "ledenboek:schulung": "Hilfe bei der Einrichtung ist eingeschlossen. Ein Schulungstermin mit Agenda ist nicht beschrieben."
+      "ledenboek:schulung": "Hilfe bei der Einrichtung ist eingeschlossen. Ein Schulungstermin mit Agenda ist nicht beschrieben.",
+      "clubway:telefon": "Telefon 0241 89439733 und support@clubway.de.",
+      "clubway:hilfe": "Öffentliche Hilfe unter docs.clubway.de.",
+      "meinverein:telefon": "Telefon 02735 90 96 715. Uhrzeiten stehen auf der Funktionsseite nicht.",
+      "meinverein:mail": "info@meinverein.de und support@meinverein.de. Der Support ist nach Anbieterangabe kostenfrei.",
+      "clubdesk:telefon": "Telefon und Fernwartung stehen in den Bezahlversionen. Eine Nummer ist in der gelesenen Übersicht nicht genannt.",
+      "clubdesk:hilfe": "Öffentliche Hilfe unter support.clubdesk.com.",
+      "vereinster:mail": "E-Mail-Support ist beschrieben. Eine Adresse und eine Antwortfrist stehen auf den gesichteten Seiten nicht.",
+      "sportmember:deutsch": "Die öffentlichen Seiten, das Support-Center und der Auftragsverarbeitungsvertrag sind deutsch. Telefon, E-Mail und Uhrzeiten sind dort nicht genannt.",
+      "sportmember:hilfe": "Deutsches Support-Center mit Anleitungen, zum Beispiel zum Beitragseinzug."
     }
   }
 ];
