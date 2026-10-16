@@ -98,7 +98,7 @@
 
   <div class="note">
     <strong>Erster Schritt sind die Ranglisten.</strong>
-    Kasse, Geschäftsstelle und IT haken an, was sie wollen. Jeder Themenbereich sortiert die zehn Angebote nach den angehakten Merkmalen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+    Kasse, Geschäftsstelle und IT haken an, was sie wollen, und geben jedem Block ein Gewicht. Die Gesamtliste zählt diese Gewichte zusammen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
   <h2>Erster Schritt: Ranglisten</h2>
@@ -110,20 +110,12 @@
   </div>
   <div id="rankings"></div>
 
-  <h2>Gewichte, die der Vorstand im Raum setzt</h2>
-  <p class="muted">Die Gewichte gelten für die Punktzahl nach dem Test. Die Ranglisten oben bleiben daneben stehen. Jede Zeile ändert sich in Fünferschritten.</p>
-  <div class="presets" id="presets"></div>
+  <h2>Gesamtliste aus diesen Gewichten</h2>
+  <p class="muted">Jeder Block trägt sein Gewicht bei. Zehn von fünfzehn Merkmalen bei Gewicht 20 ergeben 13,3 Punkte. Ein Block mit Gewicht 0 oder ohne angehaktes Merkmal bleibt draußen.</p>
   <p id="bar-label" class="muted"></p>
   <div class="bar" id="bar" aria-hidden="true"></div>
   <div id="sum-warn"></div>
-  <div class="layout">
-    <div id="weights" class="weights"></div>
-    <div class="card">
-      <h3>Engere Wahl bei dieser Gewichtung</h3>
-      <p id="shortlist"><strong></strong></p>
-      <div id="consequences" class="muted"></div>
-    </div>
-  </div>
+  <div id="gesamt"></div>
 
   <h2>Dieselben fünf Aufgaben in jedem Testkonto</h2>
   <p>Datenbasis ist ein anonymisierter Auszug von etwa 30 Mitgliedern aus ProWinner: Familien, zwei Abteilungen, ein offener Beitrag, ein beendeter Status. Die Uhr stoppt, wenn die Person die Hotline braucht.</p>
@@ -461,30 +453,31 @@ const AREAS = [
     }
   }
 ];
-const CRITERIA = [
-  { key: "kasse", label: "Beiträge und Kasse", color: "#1d4ed8" },
-  { key: "bedienung", label: "Bedienung im Ehrenamt", color: "#15803d" },
-  { key: "abteilung", label: "Abteilungen und BSB", color: "#c2410c" },
-  { key: "datenschutz", label: "Datenschutz und Ausstieg", color: "#57534e" },
-  { key: "api", label: "API und Automatisierung", color: "#6d28d9" },
-  { key: "kosten", label: "Kosten über vier Jahre", color: "#a16207" }
-];
-const PRESETS = [
-  { id: "balanced", label: "Ausgeglichen", weights: { kasse: 25, bedienung: 20, abteilung: 15, datenschutz: 15, api: 15, kosten: 10 } },
-  { id: "kasse", label: "Kasse führt", weights: { kasse: 35, bedienung: 20, abteilung: 15, datenschutz: 10, api: 10, kosten: 10 } },
-  { id: "ehrenamt", label: "Ehrenamt führt", weights: { kasse: 20, bedienung: 35, abteilung: 15, datenschutz: 10, api: 5, kosten: 15 } },
-  { id: "api", label: "Schnittstelle führt", weights: { kasse: 20, bedienung: 15, abteilung: 10, datenschutz: 15, api: 30, kosten: 10 } },
-  { id: "verband", label: "Verband und Daten", weights: { kasse: 20, bedienung: 15, abteilung: 25, datenschutz: 25, api: 10, kosten: 5 } }
-];
+const DEFAULT_WEIGHTS = {
+  sepa: 20,
+  sparten: 15,
+  rollen: 10,
+  deutsch: 5,
+  browser: 5,
+  datenschutz: 10,
+  ausstieg: 10,
+  schnittstelle: 15,
+  support: 10
+};
+const AREA_COLOR = {
+  sepa: "#1d4ed8",
+  sparten: "#c2410c",
+  rollen: "#15803d",
+  deutsch: "#0f766e",
+  browser: "#57534e",
+  datenschutz: "#7c3aed",
+  ausstieg: "#a16207",
+  schnittstelle: "#6d28d9",
+  support: "#be123c"
+};
 
-function same(a, b) {
-  return CRITERIA.every((item) => a[item.key] === b[item.key]);
-}
 function escapeHtml(value) {
   return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
-}
-function offerName(id) {
-  return OFFERS.find((item) => item[0] === id)[1];
 }
 const ROLES = [
   ["kasse", "Kasse", "liste-kasse"],
@@ -517,33 +510,46 @@ function ranked(area) {
   });
   return rows;
 }
-function shortlistIds(weights) {
-  const order = weights.api >= 25
-    ? ["easyverein", "webling", "ledenboek", "campai", "kurabu", "bundaris", "vereinonline", "orgo", "digitalmembers", "sewobe"]
-    : ["easyverein", "webling", "campai", "kurabu", "bundaris", "vereinonline", "ledenboek", "orgo", "digitalmembers", "sewobe"];
-  return order.slice(0, 3);
+function round1(value) {
+  return Math.round(value * 10) / 10;
 }
-function consequences(weights, ids) {
-  const names = ids.map(offerName);
-  const lines = [
-    "Unter dieser Gewichtung öffnet man zuerst Testkonten bei " + names.join(", ") + ".",
-    "Die Ranglisten oben bleiben daneben stehen. Sie ändern diese drei Namen nicht."
-  ];
-  if (weights.api >= 25 && ids.includes("ledenboek")) lines.push("Die Schnittstelle wiegt schwer. Ledenboek rückt nach vorn, weil die KI-Anbindung schon existiert. easyVerein und Webling bleiben vorn, weil sich darauf ein eigenes MCP bauen lässt.");
-  if (weights.api <= 10) lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Es entscheiden Kasse, Abteilungen und Bedienung.");
-  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Im Test zählt ein Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung.");
-  if (weights.bedienung >= 30) lines.push("Bedienung zählt erst, nachdem je eine Person aus der Kasse und aus einer Abteilung dieselben Aufgaben ohne IT-Begleitung zu Ende bringt.");
-  if (weights.abteilung >= 20) lines.push("Die Bestandsmeldung an den Badischen Sportbund ist eine Pflichtaufgabe im Test.");
-  lines.push("Die Kosten laufen als eigene Rechnung über vier Jahre neben der Punktzahl: Lizenzen, einmalige Übernahme, Schulung, Gebühren der Zahlungswege und der Aufwand für einen späteren Wechsel.");
-  return lines;
+function formatScore(value) {
+  return round1(value).toLocaleString("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+}
+function activeAreas() {
+  return AREAS.filter((area) => weights[area.id] > 0 && selectedFeatures(area).length > 0);
+}
+function contribution(area, offerId) {
+  const selected = selectedFeatures(area).length;
+  return weights[area.id] * points(area, offerId) / selected;
+}
+function overall() {
+  const areas = activeAreas();
+  const used = areas.reduce((total, area) => total + weights[area.id], 0);
+  const rows = OFFERS.map((offer) => ({
+    id: offer[0],
+    name: offer[1],
+    score: areas.reduce((total, area) => total + contribution(area, offer[0]), 0)
+  })).sort((a, b) => round1(b.score) - round1(a.score) || a.name.localeCompare(b.name, "de"));
+  let place = 0;
+  let last = null;
+  rows.forEach((offer, index) => {
+    const score = round1(offer.score);
+    if (score !== last) {
+      place = index + 1;
+      last = score;
+    }
+    offer.place = place;
+  });
+  return { areas, used, rows };
 }
 
-let weights = Object.assign({}, PRESETS[0].weights);
+let weights = Object.assign({}, DEFAULT_WEIGHTS);
 let checks = {};
 AREAS.forEach((area) => area.features.forEach((feature) => { checks[featureKey(area, feature[0])] = true; }));
 try {
-  const saved = JSON.parse(localStorage.getItem("tvn-weights") || "null");
-  if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
+  const saved = JSON.parse(localStorage.getItem("tvn-area-weights") || "null");
+  if (saved && AREAS.every((area) => Number.isInteger(saved[area.id]) && saved[area.id] >= 0 && saved[area.id] <= 100)) weights = saved;
   const savedChecks = JSON.parse(localStorage.getItem("tvn-checks") || "null");
   if (savedChecks && Object.keys(checks).every((key) => typeof savedChecks[key] === "boolean")) checks = savedChecks;
 } catch (_) {}
@@ -554,7 +560,9 @@ function areaBlock(area) {
     const key = featureKey(area, feature[0]);
     return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(feature[1])}</span></label>`;
   }).join("");
-  const intro = `<section class="ko"><h3>${escapeHtml(area.title)} <span class="muted">${selected.length} von ${area.features.length} Merkmalen</span></h3><p class="muted">Angehakt zählt mit. Ja und nein stammen von den öffentlichen Seiten, Stand 16. Oktober 2026.</p>${toggles}`;
+  const weight = weights[area.id];
+  const weightRow = `<div class="weights"><span>Gewicht</span><button type="button" data-area="${area.id}" data-delta="-5" ${weight <= 0 ? "disabled" : ""}>−5</button><b>${weight}</b><button type="button" data-area="${area.id}" data-delta="5" ${weight >= 100 ? "disabled" : ""}>+5</button></div>`;
+  const intro = `<section class="ko"><h3>${escapeHtml(area.title)} <span class="muted">${selected.length} von ${area.features.length} Merkmalen</span></h3>${weightRow}<p class="muted">Angehakt zählt mit. Ja und nein stammen von den öffentlichen Seiten, Stand 16. Oktober 2026.</p>${toggles}`;
   if (!selected.length) return `${intro}<p class="muted">Kein Merkmal angehakt. Die Rangliste erscheint, sobald mindestens eines an ist.</p></section>`;
   const head = selected.map((feature) => `<th title="${escapeHtml(feature[1])}">${escapeHtml(feature[1])}</th>`).join("");
   const body = ranked(area).map((offer) => {
@@ -569,33 +577,46 @@ function areaBlock(area) {
 }
 
 function render() {
-  const sum = CRITERIA.reduce((total, item) => total + weights[item.key], 0);
-  const active = PRESETS.find((preset) => same(preset.weights, weights));
-  const ids = shortlistIds(weights);
-  const names = ids.map(offerName).join(", ");
-  localStorage.setItem("tvn-weights", JSON.stringify(weights));
+  const sum = AREAS.reduce((total, area) => total + weights[area.id], 0);
+  const result = overall();
+  const names = result.rows.slice(0, 3).map((offer) => offer.name).join(", ");
+  localStorage.setItem("tvn-area-weights", JSON.stringify(weights));
   localStorage.setItem("tvn-checks", JSON.stringify(checks));
   localStorage.removeItem("tvn-sepa-min");
+  localStorage.removeItem("tvn-weights");
 
   document.getElementById("rankings").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
     const blocks = AREAS.filter((area) => area.role === roleId).map(areaBlock).join("");
     return `<section class="role-block" id="${anchor}"><h2>${escapeHtml(roleLabel)}</h2>${blocks}</section>`;
   }).join("");
 
-  document.getElementById("presets").innerHTML = PRESETS.map((preset) =>
-    `<button type="button" data-preset="${preset.id}" aria-pressed="${active && active.id === preset.id}">${preset.label}</button>`
+  document.getElementById("bar-label").textContent = `Gewichte zusammen ${sum} von 100`;
+  document.getElementById("bar").innerHTML = AREAS.filter((area) => weights[area.id] > 0).map((area) =>
+    `<span style="width:${(weights[area.id] / Math.max(sum, 100)) * 100}%;background:${AREA_COLOR[area.id]}" title="${area.title}: ${weights[area.id]}"></span>`
   ).join("");
-  document.getElementById("bar-label").textContent = `${active ? active.label : "Eigene Gewichtung"} · ${sum} von 100`;
-  document.getElementById("bar").innerHTML = CRITERIA.map((item) =>
-    `<span style="width:${(weights[item.key] / Math.max(sum, 100)) * 100}%;background:${item.color}" title="${item.label}: ${weights[item.key]}"></span>`
-  ).join("");
-  document.getElementById("sum-warn").innerHTML = sum === 100 ? "" : `<div class="warn"><strong>Summe ist nicht 100.</strong> Vor dem Beschluss die Gewichte auf 100 bringen. Sonst sind die Punktzahlen der nächsten Sitzung nicht vergleichbar.</div>`;
-  document.getElementById("weights").innerHTML = CRITERIA.map((item) =>
-    `<div class="weight"><span>${item.label}</span><button type="button" data-key="${item.key}" data-delta="-5" ${weights[item.key] <= 0 ? "disabled" : ""}>−5</button><b>${weights[item.key]}</b><button type="button" data-key="${item.key}" data-delta="5" ${weights[item.key] >= 40 ? "disabled" : ""}>+5</button></div>`
-  ).join("");
-  document.getElementById("shortlist").innerHTML = `<strong>${names}</strong>`;
-  document.getElementById("consequences").innerHTML = consequences(weights, ids).map((line) => `<p>${escapeHtml(line)}</p>`).join("");
-  document.getElementById("beschluss").textContent = `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`;
+  const idle = AREAS.filter((area) => weights[area.id] > 0 && selectedFeatures(area).length === 0).map((area) => area.title);
+  const warn = [];
+  if (sum !== 100) warn.push(`<div class="warn"><strong>Summe ist ${sum}.</strong> Für eine Liste auf 100 die Gewichte an den Blöcken auf 100 bringen.</div>`);
+  if (idle.length === 1) warn.push(`<div class="warn"><strong>${escapeHtml(idle[0])}</strong> hat ein Gewicht, aber kein angehaktes Merkmal, und fehlt in der Gesamtliste.</div>`);
+  if (idle.length > 1) warn.push(`<div class="warn"><strong>${escapeHtml(idle.join(", "))}</strong> haben ein Gewicht, aber kein angehaktes Merkmal, und fehlen in der Gesamtliste.</div>`);
+  document.getElementById("sum-warn").innerHTML = warn.join("");
+  if (!result.areas.length) {
+    document.getElementById("gesamt").innerHTML = `<p>Kein Block hat zugleich ein Gewicht und ein angehaktes Merkmal.</p>`;
+  } else {
+    const head = result.areas.map((area) => `<th title="${escapeHtml(area.title)}">${escapeHtml(area.title)}</th>`).join("");
+    const body = result.rows.map((offer) => {
+      const cells = result.areas.map((area) => {
+        const selected = selectedFeatures(area).length;
+        const got = points(area, offer.id);
+        return `<td title="${got} von ${selected} Merkmalen, Gewicht ${weights[area.id]}">${formatScore(contribution(area, offer.id))}</td>`;
+      }).join("");
+      return `<tr class="${offer.score ? "stay" : "zero"}"><td>${offer.place}. ${escapeHtml(offer.name)}</td><td>${formatScore(offer.score)} von ${formatScore(result.used)}</td>${cells}</tr>`;
+    }).join("");
+    document.getElementById("gesamt").innerHTML = `<div class="rank-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+  document.getElementById("beschluss").textContent = names
+    ? `Der Vorstand beauftragt die Prüfung der ersten drei der Gesamtliste: ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit der Punktzahl aus den Blöcken und der Vier-Jahres-Rechnung.`
+    : "Ohne Gewicht und ohne angehakte Merkmale bleibt die Gesamtliste leer. Der Vorstand setzt zuerst die Gewichte an den Blöcken.";
 }
 
 document.body.addEventListener("change", (event) => {
@@ -608,13 +629,9 @@ document.body.addEventListener("change", (event) => {
 document.body.addEventListener("click", (event) => {
   const button = event.target.closest("button");
   if (!button) return;
-  if (button.dataset.preset) {
-    const preset = PRESETS.find((item) => item.id === button.dataset.preset);
-    weights = Object.assign({}, preset.weights);
-  }
-  if (button.dataset.key) {
-    const next = weights[button.dataset.key] + Number(button.dataset.delta);
-    weights = Object.assign({}, weights, { [button.dataset.key]: Math.max(0, Math.min(40, next)) });
+  if (button.dataset.area) {
+    const next = weights[button.dataset.area] + Number(button.dataset.delta);
+    weights = Object.assign({}, weights, { [button.dataset.area]: Math.max(0, Math.min(100, next)) });
   }
   render();
 });
