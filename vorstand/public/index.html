@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vergleich für den Vorstand · TV Neuenburg 1926 e.V.</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --bg: #fafaf9;
+      --card: #ffffff;
+      --accent: #1d4ed8;
+      --warn-bg: #fffbeb;
+      --warn-ink: #92400e;
+      --info-bg: #eff6ff;
+      --info-ink: #1e3a8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.5 "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
+    h2 { font-size: 20px; margin: 36px 0 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0 0 12px; }
+    ol { margin: 0 0 12px; padding-left: 1.4em; }
+    ol li { margin: 0 0 10px; }
+    .muted { color: var(--muted); }
+    .note {
+      background: var(--info-bg);
+      color: var(--info-ink);
+      border: 1px solid #bfdbfe;
+      padding: 14px 16px;
+      margin: 20px 0;
+    }
+    .warn {
+      background: var(--warn-bg);
+      color: var(--warn-ink);
+      border: 1px solid #fcd34d;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .bar { display: flex; height: 14px; background: var(--line); margin: 8px 0 16px; }
+    .bar span { display: block; height: 100%; }
+    .presets, .weights { display: flex; flex-wrap: wrap; gap: 8px; }
+    button {
+      font: inherit;
+      border: 1px solid #d6d3d1;
+      background: white;
+      color: var(--ink);
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] { background: var(--ink); color: white; border-color: var(--ink); }
+    button:disabled { opacity: 0.4; cursor: default; }
+    .weight { display: flex; align-items: center; gap: 8px; min-width: 280px; }
+    .weight b { width: 28px; text-align: right; }
+    .weight span { width: 190px; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    table { width: 100%; border-collapse: collapse; background: var(--card); }
+    th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+    th { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .card, .ko { background: var(--card); border: 1px solid var(--line); padding: 16px; }
+    .ko { margin: 0 0 12px; }
+    .ko .head { display: flex; gap: 10px; align-items: flex-start; font-weight: 650; }
+    .ko ul { margin: 8px 0 0 28px; padding: 0; }
+    .ko li { margin: 0 0 4px; }
+    .ko .drop { margin: 10px 0 0 28px; }
+    .role-jump { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 20px; }
+    .role-block { margin: 0 0 28px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 8px; }
+    .check input { margin-top: 4px; }
+    .rank-wrap { overflow-x: auto; margin-top: 8px; }
+    .rank-wrap th, .rank-wrap td { font-size: 13px; text-align: center; white-space: nowrap; }
+    .rank-wrap td:first-child, .rank-wrap th:first-child { text-align: left; position: sticky; left: 0; background: #fff; }
+    .rank-wrap tr.zero td { color: var(--muted); }
+    .yes { color: #166534; }
+    .no { color: #a8a29e; }
+    tr.out { background: #f5f5f4; }
+    footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
+    @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: white; }
+      button { display: none; }
+      .note, .warn, .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Vergleich, den der Vorstand mitgehen kann</h1>
+  <p class="muted">TV Neuenburg 1926 e.V. Diese Seite ist öffentlich und braucht keine Anmeldung. Die Sitzung setzt Gewichte und benennt Testkonten. Punktzahlen entstehen erst, wenn Kasse, eine Abteilungsleitung und die IT dieselben Aufgaben durchgespielt haben.</p>
+
+  <div class="note">
+    <strong>Erster Schritt sind die Ranglisten.</strong>
+    Kasse, Geschäftsstelle und IT haken an, was sie wollen, und geben jedem Block ein Gewicht. Die Gesamtliste zählt diese Gewichte zusammen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Alle siebzehn geprüften Angebote stehen in jeder Rangliste. Schnittstellen zählen im Block API und Automatisierung. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+  </div>
+
+  <h2>Erster Schritt: Ranglisten</h2>
+  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Es fehlt dann dieser eine Punkt, bis ein Testkonto das Gegenteil zeigt.</p>
+  <div class="role-jump">
+    <a href="#liste-kasse">Kasse</a>
+    <a href="#liste-geschaeft">Geschäftsstelle</a>
+    <a href="#liste-it">IT</a>
+  </div>
+  <div id="rankings"></div>
+
+  <h2>Gesamtliste aus diesen Gewichten</h2>
+  <p class="muted">Jeder Block trägt sein Gewicht bei. Zehn von fünfzehn Merkmalen bei Gewicht 20 ergeben 13,3 Punkte. Ein Block mit Gewicht 0 oder ohne angehaktes Merkmal bleibt draußen.</p>
+  <p id="bar-label" class="muted"></p>
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div id="sum-warn"></div>
+  <div id="gesamt"></div>
+
+  <h2>Dieselben fünf Aufgaben in jedem Testkonto</h2>
+  <p>Datenbasis ist ein anonymisierter Auszug von etwa 30 Mitgliedern aus ProWinner: Familien, zwei Abteilungen, ein offener Beitrag, ein beendeter Status. Die Uhr stoppt, wenn die Person die Hotline braucht.</p>
+  <table>
+    <thead><tr><th>Aufgabe</th><th>Fertig, wenn</th><th>Wer</th><th>Ziel</th></tr></thead>
+    <tbody>
+      <tr><td>Bestand übernehmen</td><td>30 Personen sind drin, Dubletten sind erkannt, Abteilungen stimmen</td><td>IT mit Geschäftsstelle</td><td>45 Min.</td></tr>
+      <tr><td>Familie und Beitrag</td><td>Ein Haushalt, zwei Abteilungen, zwei Beitragssätze, ein Zahler</td><td>Kasse</td><td>20 Min.</td></tr>
+      <tr><td>Lastschrift</td><td>SEPA-Datei für ein Quartal, eine Rücklastschrift, eine Mahnung</td><td>Kasse</td><td>30 Min.</td></tr>
+      <tr><td>Auskunft</td><td>Wer ist dieses Jahr zur Abteilung Handball gekommen und hat noch nicht gezahlt</td><td>Abteilungsleitung, danach IT per API</td><td>10 Min.</td></tr>
+      <tr><td>Meldung und Ausstieg</td><td>Datei für den Badischen Sportbund und ein kompletter Export</td><td>Geschäftsstelle und IT</td><td>30 Min.</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Die vierte Aufgabe ist die Brücke zur Automatisierung. Zuerst löst sie ein Mensch in der Oberfläche, danach die IT über die API oder das MCP.</p>
+
+  <h2>Fragen an den Anbieter</h2>
+  <p>Was im Testkonto nicht sichtbar wird, geht in dieser Fassung an jeden Anbieter der engeren Wahl. Eine Antwort aus dem Testkonto wiegt schwerer als ein Text von der Website.</p>
+  <ol>
+    <li>Wir sind der TV Neuenburg 1926 e.V., etwa 1400 Mitglieder, Abteilungen Turnen, Handball, Tennis, Schwimmen, Judo und Ski/Wandern. Schicken Sie uns den Auftragsverarbeitungsvertrag, bevor wir echte Mitglieder importieren, und nennen Sie darin, welche Daten Sie für uns verarbeiten.</li>
+    <li>In welchem Land und bei welchem Rechenzentrumsbetreiber liegen Mitglieder, SEPA-Mandate und Belege?</li>
+    <li>Was kostet das Angebot für etwa 1400 Mitglieder über vier Jahre, als eine Summe aus Lizenzen, Einrichtung, Schulung und den Gebühren der Zahlungswege?</li>
+    <li>Ist die API in diesem Preis enthalten? Können wir damit Mitglieder lesen und schreiben, und ist die Dokumentation ohne Anmeldung und ohne gesonderte Freischaltung lesbar?</li>
+    <li>Gibt es eine fertige Anbindung für einen KI-Assistenten, und sieht dieser Assistent nur das, was die angemeldete Rolle sehen darf?</li>
+    <li>Erzeugen Sie aus dem Mitgliederbestand die Datei für die Bestandsmeldung an den Badischen Sportbund, und zählt eine Person in zwei Abteilungen in dieser Meldung einmal?</li>
+    <li>Wie viele Werktage dauert die Übernahme unseres Bestands aus ProWinner, und wer ordnet dabei Abteilungen, Beitragssätze und Mandatsreferenzen zu?</li>
+    <li>In welchem Dateiformat erhalten wir bei Vertragsende Mitglieder, Abteilungen, Mandatsreferenzen und Belege, und innerhalb welcher Frist nach unserer Anforderung?</li>
+  </ol>
+
+  <footer>Öffentliche Ansicht für den TV Neuenburg 1926 e.V. Gewichte bleiben in diesem Browser und werden nicht an einen Server gesendet.</footer>
+</main>
+<script>
+const OFFERS = [
+  ["ledenboek", "Ledenboek"],
+  ["orgo", "Orgo"],
+  ["easyverein", "easyVerein"],
+  ["webling", "Webling"],
+  ["campai", "campai"],
+  ["digitalmembers", "DigitalMembers"],
+  ["sewobe", "SEWOBE"],
+  ["vereinonline", "VereinOnline"],
+  ["kurabu", "Kurabu"],
+  ["bundaris", "Bundaris"],
+  ["clubway", "Clubway"],
+  ["vereinscloud", "VereinsCloud"],
+  ["vereinster", "vereinster"],
+  ["meinverein", "WISO MeinVerein Web"],
+  ["clubdesk", "ClubDesk"],
+  ["sportmember", "SportMember"],
+  ["netxp", "Netxp-Verein"]
+];
+const AREAS = [
+  {
+    id: "sepa",
+    role: "kasse",
+    title: "SEPA-Lastschrift",
+    features: [
+      ["glaeubiger", "Gläubiger-ID"],
+      ["mandat", "Mandatsreferenz"],
+      ["eltern", "Anderer Kontoinhaber"],
+      ["datei", "PAIN.008-Datei"],
+      ["format08", "pain.008.001.08"],
+      ["folge", "Erst- und Folgelastschrift"],
+      ["einmal", "Einmalig oder wiederkehrend"],
+      ["sammel", "Sammel- oder Einzelauftrag"],
+      ["direkt", "Direkt an die Bank"],
+      ["rueck", "Rücklastschrift öffnet Rechnung"],
+      ["gebuehr", "Rücklastschriftgebühr"],
+      ["auszug", "Kontoauszug zuordnen"],
+      ["familie", "Eine Lastschrift, mehrere Personen"],
+      ["pruefung", "Prüfung vor dem Download"],
+      ["vorab", "Vorabankündigung"]
+    ],
+    yes: {
+      glaeubiger: ["easyverein", "webling", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinster", "clubdesk", "netxp"],
+      mandat: ["webling", "sewobe", "ledenboek", "kurabu", "vereinonline", "bundaris", "campai", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "netxp"],
+      eltern: ["webling", "sewobe", "clubway", "netxp"],
+      datei: ["easyverein", "webling", "sewobe", "vereinonline", "bundaris", "kurabu", "ledenboek", "clubway", "vereinscloud", "vereinster", "clubdesk"],
+      format08: ["easyverein", "bundaris"],
+      folge: ["bundaris"],
+      einmal: ["webling", "meinverein", "sportmember"],
+      sammel: ["easyverein", "webling", "sewobe", "vereinonline", "clubway", "vereinster", "meinverein", "netxp"],
+      direkt: ["sewobe", "vereinonline", "clubway", "meinverein", "netxp"],
+      rueck: ["sewobe", "kurabu", "easyverein", "campai", "netxp"],
+      gebuehr: ["sewobe", "campai", "kurabu"],
+      auszug: ["webling", "bundaris", "sewobe", "kurabu", "ledenboek", "vereinonline", "clubway", "meinverein", "clubdesk", "netxp"],
+      familie: ["bundaris"],
+      pruefung: ["bundaris", "sewobe"],
+      vorab: ["bundaris", "vereinonline", "meinverein"]
+    },
+    notes: {
+      "bundaris:glaeubiger": "pain.008 setzt die Gläubiger-ID voraus. Ein eigenes Eingabefeld ist auf der Funktionsseite nicht beschrieben.",
+      "sewobe:format08": "Die Hilfe nennt für deutsche Konten noch pain.008.001.02, nicht .001.08.",
+      "vereinonline:folge": "Der Anbieter schreibt, Lastschriften werden immer als erstmalig gekennzeichnet.",
+      "webling:rueck": "Beschrieben ist ein manuelles Umbuchen und eine neue Rechnung, keine automatische Zuordnung.",
+      "campai:datei": "Belegt sind Lastschrift und Rücklastschrift-Assistent. Das Dateiformat PAIN.008 ist nicht genannt.",
+      "orgo:datei": "Zahlungen laufen über Stripe. Eine PAIN.008-Datei für die Hausbank ist nicht belegt.",
+      "digitalmembers:datei": "Belegt sind QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt.",
+      "clubway:glaeubiger": "Die Hilfe nennt ein Feld für die Gläubiger-ID. SEPA-Lastschrift ist ein kostenpflichtiges Zusatzmodul.",
+      "clubway:datei": "SEPA-XML zum Download, das Format ist je Bank wählbar. pain.008.001.08 ist nicht genannt. Zusätzlich gibt es EBICS-Direktversand.",
+      "clubway:auszug": "CAMT.053 lässt sich importieren und den Rechnungen zuordnen.",
+      "vereinscloud:datei": "SEPA-XML per Klick und Mandate mit Datum und Status sind beschrieben. Schemaversion und Gläubiger-ID sind nicht genannt.",
+      "vereinster:datei": "PAIN.008 mit Gläubiger-ID. Der Lastschriftlauf wird im Online-Banking hochgeladen.",
+      "meinverein:datei": "Lastschriften werden direkt aus der Software angestoßen, ohne separate XML-Datei bei der Bank.",
+      "meinverein:einmal": "Neben dem regelmäßigen Beitragseinzug lassen sich Einzelrechnungen per Lastschrift einziehen.",
+      "meinverein:auszug": "Kontoumsätze lassen sich abrufen und mit Belegen verknüpfen. Ein CAMT-Dateiname ist nicht genannt.",
+      "meinverein:vorab": "Die Lastschriftvorankündigung geht auf Wunsch automatisch heraus.",
+      "clubdesk:datei": "In den Bezahlversionen: SEPA-Datei zum Download und Upload im E-Banking. Die Schemaversion ist nicht genannt.",
+      "clubdesk:glaeubiger": "Die Hilfe nennt ein Feld für die Gläubiger-ID. Im Gratistarif gibt es keine SEPA-Lastschrift.",
+      "clubdesk:mandat": "Die Mandatsreferenz vergibt der Verein selbst.",
+      "clubdesk:auszug": "CAMT.053 und CAMT.054 lassen sich importieren und Rechnungen zuordnen.",
+      "sportmember:datei": "SEPA-Lastschrift im Euro-Raum ist beschrieben. Eine PAIN.008-Datei, eine Gläubiger-ID und eine Mandatsreferenz sind nicht genannt.",
+      "sportmember:einmal": "Die Hilfe nennt einmalige Beiträge, feste Beiträge und Monatsbeiträge.",
+      "sportmember:mandat": "SportMember erstellt das SEPA-Lastschriftmandat. Eine Mandatsreferenz als Feld ist nicht genannt.",
+      "netxp:glaeubiger": "Die Gläubiger-ID liegt in den Vereinsdaten und kann je Konto abweichen, zum Beispiel für eine Abteilung.",
+      "netxp:mandat": "Die Mandatsreferenz ist die interne Mitglieds-ID. Sie lässt sich selbst vergeben oder von der Automatik setzen.",
+      "netxp:eltern": "Zahler kann ein anderes Mitglied sein, auch ein Nichtmitglied wie der Großvater oder ein Träger.",
+      "netxp:datei": "Lastschriften gehen per FinTS oder optional EBICS direkt an die Bank. Eine PAIN.008-Datei zum Download ist nicht genannt.",
+      "netxp:sammel": "Die Hilfe unterscheidet Sammellastschrift und nachträgliche Einzellastschrift.",
+      "netxp:rueck": "Rückläufer werden verbucht. Die Forderung lässt sich erneut einziehen oder auf Überweisung umstellen.",
+      "netxp:auszug": "Kontoumsätze werden abgerufen und den Buchungen zugeordnet.",
+      "netxp:familie": "Das Familienoberhaupt zahlt die Beiträge der Familie. Ob daraus eine einzige Lastschrift wird, ist nicht beschrieben."
+    }
+  },
+  {
+    id: "sparten",
+    role: "geschaeft",
+    title: "Mehrspartenverein",
+    features: [
+      ["abteilungen", "Mehrere Abteilungen"],
+      ["beitraege", "Unterschiedliche Beitragssätze"],
+      ["familie", "Ein Zahler, mehrere Personen"],
+      ["verband", "Bestandsmeldung LSB/DOSB"]
+    ],
+    yes: {
+      abteilungen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "sportmember", "netxp"],
+      beitraege: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "sportmember", "netxp"],
+      familie: ["orgo", "easyverein", "sewobe", "kurabu", "bundaris", "vereinscloud", "vereinster", "meinverein", "netxp"],
+      verband: ["easyverein", "webling", "campai", "kurabu", "clubway", "vereinscloud", "vereinster", "meinverein", "netxp"]
+    },
+    notes: {
+      "ledenboek:abteilungen": "Gruppen und Ausschüsse sind beschrieben. Einen Familienzahler nennt die gesichtete Seite nicht.",
+      "orgo:abteilungen": "Familien, Gruppen und Sektionen sind dokumentiert. Ob das den Abteilungen eines Turnvereins entspricht, im Test prüfen.",
+      "digitalmembers:abteilungen": "Gruppen entstehen aus Vereinsfeldern, zum Beispiel Aktiv und Passiv. Deutsche Sportabteilungen heißen dort nicht Abteilung.",
+      "sewobe:familie": "Die Produktseite nennt Familien. Ob ein Zahler mehrere Personen bündelt, ist dort nicht ausgeführt.",
+      "easyverein:verband": "DOSB-Statistik und LSB-Export als XML. Der Badische Sportbund ist nicht namentlich genannt.",
+      "webling:verband": "LSB/DOSB-Export für die Mitgliedermeldung in Deutschland.",
+      "campai:verband": "LSB-Export mit einem Klick. Der Badische Sportbund ist nicht namentlich genannt.",
+      "kurabu:verband": "Geführte Bestandserhebung, nach Angabe des Anbieters im Format jedes Landessportbunds. Den Badischen Sportbund im Test einmal erzeugen.",
+      "clubway:abteilungen": "Die API spricht von Gruppen und Untergruppen. Das Wort Abteilung steht auf den gesichteten Seiten nicht.",
+      "clubway:verband": "DOSB-XML für die Bestandserhebung. Der Badische Sportbund ist nicht namentlich genannt.",
+      "vereinscloud:verband": "BSB Nord und BSB Freiburg sind namentlich genannt, dazu DOSB-XML.",
+      "vereinscloud:familie": "Eine Familien-Anmeldung ist beschrieben.",
+      "vereinster:abteilungen": "Mehrere Abteilungen je Mitglied sind beschrieben, zum Beispiel Fußball und Schwimmen. Der Tarif Organisation endet bei 1.000 Mitgliedern.",
+      "vereinster:familie": "Familienverknüpfungen und Bezugspersonen sind beschrieben. Ob ein Zahler mehrere Personen bündelt, im Test prüfen.",
+      "vereinster:verband": "DOSB-XML nur im Tarif Organisation. Der veröffentlichte Tarif endet bei 1.000 Mitgliedern, der Verein hat etwa 1.400.",
+      "meinverein:familie": "Beitragssätze für Familien und die Zahlungsart „ein anderes Mitglied“.",
+      "meinverein:verband": "A- und B-Meldungen als Excel oder XML. Der Badische Sportbund ist nicht namentlich genannt.",
+      "sportmember:abteilungen": "Ein Abteilungswechsel ist beschrieben. Ob mehrere Sportabteilungen parallel laufen, im Test prüfen.",
+      "clubdesk:verband": "Belegt ist eine Schnittstelle zu nuLiga. Eine Bestandsmeldung an den LSB oder DOSB ist nicht belegt.",
+      "netxp:abteilungen": "Mitglieder lassen sich einer oder mehreren Sparten und Abteilungen zuordnen. Sparten steuern Beiträge und Auswertungen.",
+      "netxp:familie": "Ein Zahler, auch ein Nichtmitglied, übernimmt Beiträge anderer Personen. Der Vereinsbeitrag und ein Spartenbeitrag können verschiedene Zahler haben.",
+      "netxp:verband": "Assistent für die DOSB- und LSB-Bestandsmeldung, Datei ja.dat. Der Badische Sportbund ist nicht namentlich genannt."
+    }
+  },
+  {
+    id: "rollen",
+    role: "geschaeft",
+    title: "Getrennte Rollen",
+    features: [
+      ["rollen", "Eigene Rollen"],
+      ["sparte", "Nur die eigene Abteilung"],
+      ["portal", "Mitglied pflegt eigene Daten"],
+      ["lesen", "API-Schlüssel nur lesen"]
+    ],
+    yes: {
+      rollen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      sparte: ["easyverein", "sewobe", "kurabu", "vereinscloud"],
+      portal: ["webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      lesen: ["ledenboek", "orgo", "easyverein", "digitalmembers", "kurabu", "clubway"]
+    },
+    notes: {
+      "easyverein:sparte": "In der Dachverbandslösung sehen Abteilungsverwalter die anderen Abteilungen nicht. Jede Abteilung braucht eine eigene Lizenz.",
+      "sewobe:sparte": "Bei der Zuordnung einer Abteilung werden Adressrechte mit vergeben.",
+      "kurabu:sparte": "Das Rechtemanagement legt fest, welche Abteilungen eine Rolle sieht und bearbeitet.",
+      "digitalmembers:portal": "Mitglieder schlagen Änderungen vor. Sie gehen erst nach Freigabe live.",
+      "easyverein:lesen": "Ein API-Schlüssel erbt die Rechte seiner Administratorgruppe. Eine nur lesende Gruppe ergibt einen nur lesenden Schlüssel.",
+      "campai:lesen": "Die Entwicklerseite schreibt, die API stellt alle Funktionen ohne Einschränkung bereit.",
+      "bundaris:rollen": "Beschrieben sind Funktionen und, für größere Organisationen, Sub-Mandanten. Eine feine Abteilungsrolle steht auf der Sportseite nicht.",
+      "clubway:lesen": "Der API-Schlüssel folgt der Rolle. Die Sichtbarkeit einzelner Felder lässt sich einschränken.",
+      "clubway:portal": "Mitglieder pflegen Adresse und Bankverbindung selbst, in der App oder im Browser.",
+      "vereinscloud:sparte": "Jeder Abteilung lassen sich eigene Verantwortliche mit eigenen Rechten zuweisen.",
+      "vereinscloud:portal": "Im Self-Service sieht und korrigiert jedes Mitglied seine Daten selbst.",
+      "vereinscloud:rollen": "Rollen mit Berechtigungen pro Modul. Eine Account-Grenze ist nicht genannt.",
+      "meinverein:rollen": "Eigene Rollen gibt es in den größeren Tarifen.",
+      "clubdesk:rollen": "Rollen und Funktionen steuern den Datenzugriff. Im Gratistarif sind drei feste Rechtegruppen beschrieben.",
+      "netxp:rollen": "Nutzerrechte sind aufgabenbezogen zuweisbar. Eine Sicht nur auf die eigene Abteilung ist nicht beschrieben.",
+      "netxp:portal": "Mitglieder.Online ist ein kostenpflichtiges Zusatzmodul. Änderungen können erst nach Freigabe übernommen werden."
+    }
+  },
+  {
+    id: "deutsch",
+    role: "geschaeft",
+    title: "Deutsch",
+    features: [
+      ["oberflaeche", "Oberfläche auf Deutsch"],
+      ["hilfe", "Hilfe auf Deutsch"]
+    ],
+    yes: {
+      oberflaeche: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "clubdesk", "sportmember", "netxp"]
+    },
+    notes: {
+      "ledenboek:oberflaeche": "Deutsche Oberfläche. Herkunft und Buchhaltungslogik sind niederländisch.",
+      "orgo:oberflaeche": "Deutsche Seiten sind vorhanden. Eine deutsche Hilfe zum Lastschriftlauf ist nicht belegt.",
+      "digitalmembers:hilfe": "Deutsche Dokumentation. Fachsprache daneben auch schweizerisch, etwa QR-Rechnung.",
+      "meinverein:hilfe": "Die Funktionsseiten sind deutsch. Ein öffentliches Hilfecenter ist dort nicht belegt.",
+      "sportmember:hilfe": "Es gibt ein deutsches Support-Center mit Anleitungen, zum Beispiel zum Beitragseinzug.",
+      "netxp:hilfe": "Öffentliches Wiki und Schulungsvideos auf Deutsch."
+    }
+  },
+  {
+    id: "browser",
+    role: "it",
+    title: "Nur im Browser",
+    features: [
+      ["browser", "Ohne Installation im Browser"],
+      ["gleichzeitig", "Mehrere Personen gleichzeitig"],
+      ["app", "Eigene App"]
+    ],
+    yes: {
+      browser: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      gleichzeitig: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      app: ["easyverein", "campai", "kurabu", "clubway", "vereinscloud", "meinverein", "sportmember"]
+    },
+    notes: {
+      "webling:app": "Webling nennt die Arbeit im Browser und ausdrücklich keine eigene App.",
+      "ledenboek:browser": "Webanwendung, Server bei Hetzner in Deutschland.",
+      "vereinster:app": "Eine eigene App ist auf den Seiten des Anbieters nicht als Leistung genannt.",
+      "clubdesk:app": "ClubDesk nennt die Arbeit im Browser. Eine native App ist nicht belegt.",
+      "netxp:browser": "Heute ist es ein Windows-Programm. Der Browserzugriff ist eine kostenpflichtige Webzugangslizenz, eine Lizenz je gleichzeitiger Sitzung. Die Browser-Plattform ist bis 2031 angekündigt.",
+      "netxp:gleichzeitig": "Mehrere Personen arbeiten am zentralen Bestand. Jede Webzugangslizenz gilt für eine gleichzeitige Sitzung.",
+      "netxp:app": "Android und iOS erreichen die Software über den Browser. Eine App in den Stores ist die Ankündigung bis 2031."
+    }
+  },
+  {
+    id: "datenschutz",
+    role: "it",
+    title: "Datenschutz",
+    features: [
+      ["standort", "Serverstandort genannt"],
+      ["betreiber", "Rechenzentrumsbetreiber genannt"]
+    ],
+    yes: {
+      standort: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      betreiber: ["ledenboek", "digitalmembers", "vereinonline", "clubway", "vereinster", "meinverein", "sportmember"]
+    },
+    notes: {
+      "ledenboek:betreiber": "Server bei Hetzner in Deutschland.",
+      "orgo:standort": "Genannt wird die EU. Ein Rechenzentrum und ein Betreiber stehen auf den gesichteten Seiten nicht.",
+      "easyverein:standort": "Genannt werden Nürnberg, Falkenstein und Frankfurt. Der Betreiber des Rechenzentrums nicht.",
+      "webling:standort": "Rechenzentrum in der Schweiz. Der Betreiber ist nicht genannt. Ein Angemessenheitsbeschluss liegt vor.",
+      "campai:standort": "Hosting Deutschland ist angegeben. Der Betreiber ist nicht genannt.",
+      "digitalmembers:betreiber": "Kubernetes bei Hetzner in Deutschland. Dediziertes Hosting in der Schweiz bietet der Anbieter nicht an.",
+      "vereinonline:betreiber": "Hosting in Deutschland bei Ionos.",
+      "bundaris:standort": "Daten in deutschen Rechenzentren. Der Betreiber ist nicht genannt.",
+      "sewobe:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht.",
+      "kurabu:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht.",
+      "clubway:betreiber": "Server bei AWS in Frankfurt. Die Firma ist Taikala Oy in Finnland, der Kontakt sitzt in Aachen.",
+      "vereinscloud:standort": "Hosting in Deutschland. Der Betreiber des Rechenzentrums ist nicht genannt.",
+      "vereinster:betreiber": "Server bei Hetzner in Deutschland.",
+      "meinverein:betreiber": "Eigene Rechenzentren der Buhl Data Service GmbH in Deutschland, am Hauptsitz.",
+      "clubdesk:standort": "Hosting in Zürich. Der Betreiber des Rechenzentrums ist nicht genannt.",
+      "sportmember:betreiber": "Produktion bei Hetzner in Gunzenhausen. Verschlüsselte Sicherungen bei AWS in Irland. Einzelne Unterauftragnehmer sitzen in den USA.",
+      "netxp:standort": "Serverstandort Deutschland, tägliche Sicherung. Der Betreiber des Rechenzentrums ist nicht genannt."
+    }
+  },
+  {
+    id: "ausstieg",
+    role: "it",
+    title: "Ausstieg mit den Daten",
+    features: [
+      ["mitglieder", "Mitgliederliste als Datei"],
+      ["buchhaltung", "Buchhaltungsexport"],
+      ["api", "Mitglieder über die API"],
+      ["anhaenge", "Anhänge oder Belege mit dabei"]
+    ],
+    yes: {
+      mitglieder: ["ledenboek", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "kurabu", "bundaris", "vereinscloud", "vereinster", "netxp"],
+      buchhaltung: ["ledenboek", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris", "vereinster", "meinverein", "sportmember", "netxp"],
+      api: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "clubway", "sportmember", "netxp"],
+      anhaenge: ["ledenboek", "webling", "campai", "digitalmembers", "kurabu"]
+    },
+    notes: {
+      "ledenboek:mitglieder": "Eine Sicherungsdatei des ganzen Vereins, inklusive Anhänge.",
+      "ledenboek:buchhaltung": "Die Buchhaltung kommt als XAF heraus, das niederländische Audit-Format.",
+      "easyverein:api": "Die API liest Mitglieder. Für einen kompletten Abzug verweist der Anbieter auf die Exportfunktion.",
+      "easyverein:buchhaltung": "DATEV-Export für EÜR oder Bilanz, mit Buchungsstapel und Stammdaten.",
+      "webling:anhaenge": "Export als Excel, CSV oder als ZIP mit Bildern und Dateien. Dazu DATEV.",
+      "campai:api": "Der Anbieter schreibt, alle Funktionen liegen in der API. Ob die Mitgliederliste im aktuellen Stand herauskommt, im Test prüfen.",
+      "campai:anhaenge": "Belege lassen sich aus der Belegübersicht als Datei exportieren.",
+      "digitalmembers:api": "Die Mitgliederliste liegt am Endpunkt /v2/member/. Der Schlüssel legt fest, welche Bereiche er sieht.",
+      "digitalmembers:anhaenge": "Alle Daten, auch Belege, sind über die API als JSON, Excel oder PDF erreichbar. Ein einzelnes Sicherungspaket ist nicht beschrieben.",
+      "sewobe:mitglieder": "Belegt ist der Export von Auswertungen als CSV oder XML.",
+      "sewobe:buchhaltung": "Die Produktseite nennt Buchhaltung und DATEV.",
+      "vereinonline:api": "Die API kann Mitglieder lesen. Ein Datei-Export der ganzen Mitgliederliste am Vertragsende ist nicht belegt.",
+      "vereinonline:buchhaltung": "DATEV-Export als Datei und als Übertragung in die DATEV-Cloud.",
+      "kurabu:mitglieder": "Die Funktionsseite nennt einen vollständigen Export aller Daten, dazu CSV und Excel.",
+      "kurabu:buchhaltung": "Rechnungsdaten eines Monats als CSV, Excel oder ASCII-Datei für DATEV.",
+      "kurabu:api": "Die öffentliche API beschreibt News, Abteilungen, Teams und Orte. Eine Mitgliederliste ist dort nicht belegt.",
+      "bundaris:mitglieder": "Die Mitgliederliste lässt sich jederzeit als Excel exportieren.",
+      "bundaris:buchhaltung": "DATEV-Export für den Steuerberater, Kontenrahmen an SKR42 orientiert.",
+      "bundaris:api": "Die JSON-API nennt Termine, News und Statistik. Mitglieder und Buchungen gehen per Excel, CSV und DATEV.",
+      "orgo:api": "Die API liest Mitglieder, Zahlungen und Events. Ein Dateiformat für den kompletten Ausstieg ist nicht belegt.",
+      "vereinscloud:mitglieder": "Mitgliederlisten als PDF oder CSV.",
+      "vereinscloud:api": "Eine allgemeine Mitglieder-API ist auf den gesichteten Seiten nicht belegt.",
+      "vereinster:mitglieder": "Export als CSV oder Excel.",
+      "vereinster:buchhaltung": "Die Sportseite nennt SKR42 und DATEV-Standard 2025. Das genaue Exportdateiformat im Test prüfen.",
+      "vereinster:api": "Eine API ist auf den Funktions- und Preisseiten nicht als Leistung belegt.",
+      "meinverein:buchhaltung": "DATEV-Export, Kontenrahmen SKR 49.",
+      "meinverein:api": "Der Support hat am 25. Juni 2024 geschrieben, ein Zugriff per API sei nicht möglich.",
+      "clubway:api": "Mitglieder lassen sich über die REST-API lesen und, für den Vereinsbesitzer, anlegen.",
+      "clubdesk:api": "Belegt ist eine Schnittstelle zu nuLiga. Ein Mitgliederabzug über eine öffentliche REST-API ist nicht belegt.",
+      "sportmember:mitglieder": "Belegt ist der Export der eigenen Profildaten. Eine Mitgliederliste des ganzen Vereins als Datei ist nicht genannt.",
+      "sportmember:buchhaltung": "Zahlungen lassen sich in Buchhaltungssysteme exportieren. DATEV oder ein Kontenrahmen sind nicht genannt.",
+      "netxp:mitglieder": "Die Mitgliederliste lässt sich als Excel exportieren, alle oder nur die Auswahl.",
+      "netxp:buchhaltung": "Die Hilfe nennt den DATEV-Export für den Steuerberater.",
+      "netxp:api": "Mitglieder liegen als VCard und als AlleMitglieder.csv an einer WebDAV-Adresse. Eine REST-Liste der Endpunkte ist nicht veröffentlicht.",
+      "sportmember:api": "Teammitglieder über HTTP-Basic-Auth. Kein vereinweiter Mitgliederexport in der gelesenen API-Beschreibung."
+    }
+  },
+  {
+    id: "schnittstelle",
+    role: "it",
+    title: "API und Automatisierung",
+    features: [
+      ["doku", "Öffentliche Dokumentation"],
+      ["lesen", "Mitglieder lesen"],
+      ["schreiben", "Mitglieder schreiben"],
+      ["webhooks", "Webhooks"],
+      ["spec", "OpenAPI-Spezifikation"],
+      ["mcp", "Fertige KI-Anbindung"],
+      ["nocode", "Zapier, n8n oder Plugin"],
+      ["rechte", "Schlüssel mit eingeschränkten Rechten"],
+      ["sandbox", "Testumgebung"]
+    ],
+    yes: {
+      doku: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "kurabu", "bundaris", "clubway", "sportmember", "netxp"],
+      lesen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "clubway", "sportmember", "netxp"],
+      schreiben: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "clubway", "sportmember", "netxp"],
+      webhooks: ["orgo", "campai", "digitalmembers"],
+      spec: ["ledenboek", "campai", "digitalmembers"],
+      mcp: ["ledenboek", "orgo"],
+      nocode: ["orgo", "webling", "digitalmembers", "vereinonline", "bundaris"],
+      rechte: ["ledenboek", "orgo", "easyverein", "digitalmembers", "vereinonline", "kurabu", "clubway"],
+      sandbox: ["ledenboek", "webling"]
+    },
+    notes: {
+      "sewobe:doku": "Eine REST-API ist beschrieben. Die Endpoint-Liste gibt es nur auf Anfrage beim Anbieter.",
+      "sewobe:lesen": "Beschrieben ist das Auslesen mitgliedsbezogener Daten für Portale und Apps.",
+      "sewobe:schreiben": "Beschrieben ist die automatisierte Anlage von Kontakten und Beitragspositionen.",
+      "easyverein:doku": "Die Dokumentationsadresse ist öffentlich erreichbar. API-Schlüssel laufen nach 30 Tagen ab und lassen sich ab Tag 15 erneuern.",
+      "easyverein:schreiben": "Lesen und Schreiben folgen der Administratorgruppe. Import und Export sind über die API ausgenommen.",
+      "webling:nocode": "Zapier und ein WordPress-Plugin sind beschrieben. Webhooks stehen dort im Zusammenhang mit Zapier, nicht als eigene Ereignisliste.",
+      "webling:sandbox": "Eine Sandbox ist auf der Schnittstellenseite genannt.",
+      "ledenboek:sandbox": "Für Tests gibt es eigene Testsleutel.",
+      "ledenboek:mcp": "Die Entwicklerseite beschreibt eine KI-Anbindung für Claude und ChatGPT, nach Anmeldung und innerhalb der Nutzerrechte. Schreiben über diese Anbindung ist dort nicht belegt.",
+      "orgo:mcp": "Eigenes MCP, lesend und schreibend, über die REST-API. Schlüssel lassen sich auf Bereiche einschränken.",
+      "orgo:nocode": "Ein n8n-Knoten ist beschrieben.",
+      "campai:schreiben": "Der Anbieter schreibt, alle Funktionen liegen in der API. Ob die Mitgliederliste im aktuellen Stand herauskommt, im Test prüfen.",
+      "campai:rechte": "Die Entwicklerseite schreibt, die API stellt alle Funktionen ohne Einschränkung bereit.",
+      "digitalmembers:schreiben": "Schlüssel können je Modul nur lesen oder die volle Verwaltung bekommen.",
+      "digitalmembers:webhooks": "Webhooks mit Signatur, Zustellprotokoll und Testversand sind beschrieben.",
+      "vereinonline:nocode": "Ein WordPress-Plugin nutzt dieselbe API.",
+      "vereinonline:rechte": "Der API-Benutzer braucht das passende Rollenrecht, zum Beispiel Mitgliederdaten lesen.",
+      "kurabu:doku": "Öffentliche API in der Beta. Dokumentiert sind vor allem News, Abteilungen, Teams und Orte.",
+      "kurabu:lesen": "Eine Mitgliederliste ist in der öffentlichen API nicht belegt.",
+      "bundaris:doku": "Die öffentliche JSON-API nennt Termine, News und Statistik. Der API-Zugang steht in den höheren Tarifen.",
+      "bundaris:nocode": "WordPress-Plugin und iframe-Widgets, daneben die JSON-API.",
+      "clubway:doku": "Öffentliche REST-Dokumentation. Die API ist ein kostenpflichtiges Zusatzmodul.",
+      "clubway:schreiben": "Mitglieder anlegen geht für den Vereinsbesitzer. Ändern schaltet der Support je Schlüssel frei.",
+      "clubway:rechte": "Der Schlüssel hängt an der Rolle. Die Sichtbarkeit einzelner Felder lässt sich einschränken.",
+      "sportmember:doku": "Öffentliche HTTP-API für Teams, Anwesenheiten und Profile. Anmeldung mit Benutzername und Passwort, keine OpenAPI-Spezifikation.",
+      "sportmember:lesen": "Die gelesene API listet Teammitglieder. Einen vereinweiten Mitgliederexport beschreibt sie nicht.",
+      "sportmember:schreiben": "Profile lassen sich aktualisieren. Der Zugang ist HTTP-Basic-Auth, kein eingeschränkter Schlüssel.",
+      "vereinscloud:doku": "Eine allgemeine Mitglieder-API ist auf den gesichteten Seiten nicht belegt.",
+      "vereinster:doku": "Eine API ist auf den Funktions- und Preisseiten nicht als Leistung belegt.",
+      "meinverein:doku": "Der Support hat am 25. Juni 2024 geschrieben, ein Zugriff per API und eine Anbindung anderer Anwendungen sei nicht möglich.",
+      "clubdesk:doku": "Belegt ist eine Schnittstelle zu nuLiga. Eine öffentliche REST-API ist nicht belegt. Der Forenwunsch hat keinen Termin.",
+      "netxp:doku": "Das Wiki beschreibt die Mitglieder-Schnittstelle als WebDAV mit VCards und einem PHP-Beispiel. Der API-Client in Netxp-Verein Pro hat keine öffentliche Endpunktliste.",
+      "netxp:lesen": "Ein Mitglied per GET, die ganze Liste als AlleMitglieder.csv.",
+      "netxp:schreiben": "Ein Mitglied wird als VCard per PUT angelegt oder geändert. Anmeldung mit Vereins-ID, Benutzername und Passwort."
+    }
+  },
+  {
+    id: "support",
+    role: "it",
+    title: "Support",
+    features: [
+      ["deutsch", "Antworten auf Deutsch"],
+      ["telefon", "Telefon für den Support"],
+      ["zeiten", "Uhrzeiten genannt"],
+      ["mail", "E-Mail oder Ticket"],
+      ["hilfe", "Öffentliches Handbuch"],
+      ["antwort", "Antwortfrist genannt"],
+      ["schulung", "Schulung oder Einführung"]
+    ],
+    yes: {
+      deutsch: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "meinverein", "clubdesk", "sportmember", "netxp"],
+      telefon: ["easyverein", "sewobe", "vereinonline", "kurabu", "digitalmembers", "ledenboek", "clubway", "meinverein", "clubdesk", "netxp"],
+      zeiten: ["easyverein", "sewobe", "ledenboek", "netxp"],
+      mail: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "ledenboek", "orgo", "clubway", "vereinster", "meinverein", "netxp"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "clubway", "vereinscloud", "vereinster", "clubdesk", "sportmember", "netxp"],
+      antwort: ["easyverein", "kurabu", "bundaris", "ledenboek", "netxp"],
+      schulung: ["sewobe", "ledenboek", "netxp"]
+    },
+    notes: {
+      "orgo:deutsch": "Deutsche Produktseiten sind vorhanden. Das Kontaktformular und die Adresse contact@orgo.space stehen auf einer englischen Seite.",
+      "orgo:mail": "Kontaktformular, ersatzweise contact@orgo.space. Telefon und Uhrzeiten sind nicht genannt.",
+      "webling:telefon": "Im Impressum steht eine Telefonnummer. Supportanfragen sollen per E-Mail an support@webling.ch gehen.",
+      "webling:mail": "E-Mail-Support ist im Preis enthalten. Eine Antwortfrist ist nicht genannt.",
+      "campai:telefon": "Die Datenschutzerklärung erwähnt Anrufen und Chatten. Eine Nummer und Uhrzeiten stehen dort nicht. In der Community läuft der Support über support@campai.com.",
+      "campai:mail": "support@campai.com, dazu eine Community mit Dokumentation.",
+      "easyverein:telefon": "Telefon, E-Mail und Chat. Montag bis Donnerstag 8 bis 16 Uhr, Freitag 8 bis 14 Uhr.",
+      "easyverein:antwort": "Innerhalb der Geschäftszeiten lag die genannte durchschnittliche Antwortzeit unter 1 Stunde und 9 Minuten.",
+      "sewobe:telefon": "Telefon Montag bis Freitag 8:30 bis 12 Uhr und 13 bis 17:30 Uhr, dazu ein Serviceportal.",
+      "sewobe:schulung": "Einführungsschulung vor Ort, in Augsburg oder per TeamViewer und Telefon.",
+      "vereinonline:telefon": "Es gibt einen Telefon-Rückruf und eine E-Mail-Anfrage. Eine Hotline mit Uhrzeit ist nicht veröffentlicht. Umfassende Hilfe ist als kostenpflichtiger Dienst genannt.",
+      "kurabu:telefon": "Telefon und E-Mail sind genannt. Uhrzeiten für das Telefon stehen auf der Kontaktseite nicht.",
+      "kurabu:antwort": "Nachrichten werden in der Regel innerhalb von 24 Stunden bearbeitet.",
+      "digitalmembers:telefon": "Telefon und E-Mail sind genannt, die Anfrage geht an das kleine Team. Uhrzeiten stehen auf der Teamseite nicht.",
+      "bundaris:telefon": "Im Impressum steht eine Handynummer. Die Preistabelle nennt E-Mail-Support, je nach Tarif mit 48 oder 24 Stunden.",
+      "bundaris:antwort": "E-Mail-Support: 48 Stunden im Einstieg, 24 Stunden in den mittleren Tarifen, priorisierte Tickets im Enterprise-Tarif.",
+      "ledenboek:deutsch": "Die Supportseite ist niederländisch. Telefon werktags 9 bis 17 Uhr, ohne Warteschlange.",
+      "ledenboek:mail": "Eine Person antwortet innerhalb eines Werktags. Außerhalb der Telefonzeit und im Urlaub nur per E-Mail.",
+      "ledenboek:schulung": "Hilfe bei der Einrichtung ist eingeschlossen. Ein Schulungstermin mit Agenda ist nicht beschrieben.",
+      "clubway:telefon": "Telefon 0241 89439733 und support@clubway.de.",
+      "clubway:hilfe": "Öffentliche Hilfe unter docs.clubway.de.",
+      "meinverein:telefon": "Telefon 02735 90 96 715. Uhrzeiten stehen auf der Funktionsseite nicht.",
+      "meinverein:mail": "info@meinverein.de und support@meinverein.de. Der Support ist nach Anbieterangabe kostenfrei.",
+      "clubdesk:telefon": "Telefon und Fernwartung stehen in den Bezahlversionen. Eine Nummer ist in der gelesenen Übersicht nicht genannt.",
+      "clubdesk:hilfe": "Öffentliche Hilfe unter support.clubdesk.com.",
+      "vereinster:mail": "E-Mail-Support ist beschrieben. Eine Adresse und eine Antwortfrist stehen auf den gesichteten Seiten nicht.",
+      "sportmember:deutsch": "Die öffentlichen Seiten, das Support-Center und der Auftragsverarbeitungsvertrag sind deutsch. Telefon, E-Mail und Uhrzeiten sind dort nicht genannt.",
+      "sportmember:hilfe": "Deutsches Support-Center mit Anleitungen, zum Beispiel zum Beitragseinzug.",
+      "netxp:telefon": "Hotline 08721 50648-89, Montag bis Freitag 8 bis 17 Uhr. Fragen, die das Wiki schon erklärt, kosten 15 Euro je angefangene 10 Minuten.",
+      "netxp:mail": "info@netxp-verein.de. Antwort meist innerhalb von zwei Arbeitstagen.",
+      "netxp:schulung": "Online-Schulungen mit Terminen und aufgezeichnete Schulungsvideos."
+    }
+  }
+];
+const DEFAULT_WEIGHTS = {
+  sepa: 20,
+  sparten: 15,
+  rollen: 10,
+  deutsch: 5,
+  browser: 5,
+  datenschutz: 10,
+  ausstieg: 10,
+  schnittstelle: 15,
+  support: 10
+};
+const AREA_COLOR = {
+  sepa: "#1d4ed8",
+  sparten: "#c2410c",
+  rollen: "#15803d",
+  deutsch: "#0f766e",
+  browser: "#57534e",
+  datenschutz: "#7c3aed",
+  ausstieg: "#a16207",
+  schnittstelle: "#6d28d9",
+  support: "#be123c"
+};
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
+}
+const ROLES = [
+  ["kasse", "Kasse", "liste-kasse"],
+  ["geschaeft", "Geschäftsstelle", "liste-geschaeft"],
+  ["it", "IT", "liste-it"]
+];
+function featureKey(area, featureId) {
+  return area.id + ":" + featureId;
+}
+function selectedFeatures(area) {
+  return area.features.filter((feature) => checks[featureKey(area, feature[0])]);
+}
+function hasFeature(area, offerId, featureId) {
+  return area.yes[featureId].includes(offerId);
+}
+function points(area, offerId) {
+  return selectedFeatures(area).filter((feature) => hasFeature(area, offerId, feature[0])).length;
+}
+function ranked(area) {
+  const rows = OFFERS.map((offer) => ({ id: offer[0], name: offer[1], points: points(area, offer[0]) }))
+    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
+  let place = 0;
+  let last = null;
+  rows.forEach((offer, index) => {
+    if (offer.points !== last) {
+      place = index + 1;
+      last = offer.points;
+    }
+    offer.place = place;
+  });
+  return rows;
+}
+function round1(value) {
+  return Math.round(value * 10) / 10;
+}
+function formatScore(value) {
+  return round1(value).toLocaleString("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+}
+function activeAreas() {
+  return AREAS.filter((area) => weights[area.id] > 0 && selectedFeatures(area).length > 0);
+}
+function contribution(area, offerId) {
+  const selected = selectedFeatures(area).length;
+  return weights[area.id] * points(area, offerId) / selected;
+}
+function overall() {
+  const areas = activeAreas();
+  const used = areas.reduce((total, area) => total + weights[area.id], 0);
+  const rows = OFFERS.map((offer) => ({
+    id: offer[0],
+    name: offer[1],
+    score: areas.reduce((total, area) => total + contribution(area, offer[0]), 0)
+  })).sort((a, b) => round1(b.score) - round1(a.score) || a.name.localeCompare(b.name, "de"));
+  let place = 0;
+  let last = null;
+  rows.forEach((offer, index) => {
+    const score = round1(offer.score);
+    if (score !== last) {
+      place = index + 1;
+      last = score;
+    }
+    offer.place = place;
+  });
+  return { areas, used, rows };
+}
+
+let weights = Object.assign({}, DEFAULT_WEIGHTS);
+let checks = {};
+AREAS.forEach((area) => area.features.forEach((feature) => { checks[featureKey(area, feature[0])] = true; }));
+try {
+  const saved = JSON.parse(localStorage.getItem("tvn-area-weights") || "null");
+  if (saved && AREAS.every((area) => Number.isInteger(saved[area.id]) && saved[area.id] >= 0 && saved[area.id] <= 100)) weights = saved;
+  const savedChecks = JSON.parse(localStorage.getItem("tvn-checks") || "null");
+  if (savedChecks && Object.keys(checks).every((key) => typeof savedChecks[key] === "boolean")) checks = savedChecks;
+} catch (_) {}
+
+function areaBlock(area) {
+  const selected = selectedFeatures(area);
+  const toggles = area.features.map((feature) => {
+    const key = featureKey(area, feature[0]);
+    return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(feature[1])}</span></label>`;
+  }).join("");
+  const weight = weights[area.id];
+  const weightRow = `<div class="weights"><span>Gewicht</span><button type="button" data-area="${area.id}" data-delta="-5" ${weight <= 0 ? "disabled" : ""}>−5</button><b>${weight}</b><button type="button" data-area="${area.id}" data-delta="5" ${weight >= 100 ? "disabled" : ""}>+5</button></div>`;
+  const intro = `<section class="ko"><h3>${escapeHtml(area.title)} <span class="muted">${selected.length} von ${area.features.length} Merkmalen</span></h3>${weightRow}<p class="muted">Angehakt zählt mit. Ja und nein stammen von den öffentlichen Seiten, Stand 16. Oktober 2026.</p>${toggles}`;
+  if (!selected.length) return `${intro}<p class="muted">Kein Merkmal angehakt. Die Rangliste erscheint, sobald mindestens eines an ist.</p></section>`;
+  const head = selected.map((feature) => `<th title="${escapeHtml(feature[1])}">${escapeHtml(feature[1])}</th>`).join("");
+  const body = ranked(area).map((offer) => {
+    const cells = selected.map((feature) => {
+      const on = hasFeature(area, offer.id, feature[0]);
+      const note = area.notes[offer.id + ":" + feature[0]] || (on ? "Auf den gesichteten Anbieterseiten belegt." : "Auf den gesichteten Anbieterseiten nicht belegt.");
+      return `<td class="${on ? "yes" : "no"}" title="${escapeHtml(note)}">${on ? "ja" : "nein"}</td>`;
+    }).join("");
+    return `<tr class="${offer.points ? "stay" : "zero"}"><td>${offer.place}. ${escapeHtml(offer.name)}</td><td>${offer.points} von ${selected.length}</td>${cells}</tr>`;
+  }).join("");
+  return `${intro}<div class="rank-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
+}
+
+function render() {
+  const sum = AREAS.reduce((total, area) => total + weights[area.id], 0);
+  const result = overall();
+  localStorage.setItem("tvn-area-weights", JSON.stringify(weights));
+  localStorage.setItem("tvn-checks", JSON.stringify(checks));
+  localStorage.removeItem("tvn-sepa-min");
+  localStorage.removeItem("tvn-weights");
+
+  document.getElementById("rankings").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
+    const blocks = AREAS.filter((area) => area.role === roleId).map(areaBlock).join("");
+    return `<section class="role-block" id="${anchor}"><h2>${escapeHtml(roleLabel)}</h2>${blocks}</section>`;
+  }).join("");
+
+  document.getElementById("bar-label").textContent = `Gewichte zusammen ${sum} von 100`;
+  document.getElementById("bar").innerHTML = AREAS.filter((area) => weights[area.id] > 0).map((area) =>
+    `<span style="width:${(weights[area.id] / Math.max(sum, 100)) * 100}%;background:${AREA_COLOR[area.id]}" title="${area.title}: ${weights[area.id]}"></span>`
+  ).join("");
+  const idle = AREAS.filter((area) => weights[area.id] > 0 && selectedFeatures(area).length === 0).map((area) => area.title);
+  const warn = [];
+  if (sum !== 100) warn.push(`<div class="warn"><strong>Summe ist ${sum}.</strong> Für eine Liste auf 100 die Gewichte an den Blöcken auf 100 bringen.</div>`);
+  if (idle.length === 1) warn.push(`<div class="warn"><strong>${escapeHtml(idle[0])}</strong> hat ein Gewicht, aber kein angehaktes Merkmal, und fehlt in der Gesamtliste.</div>`);
+  if (idle.length > 1) warn.push(`<div class="warn"><strong>${escapeHtml(idle.join(", "))}</strong> haben ein Gewicht, aber kein angehaktes Merkmal, und fehlen in der Gesamtliste.</div>`);
+  document.getElementById("sum-warn").innerHTML = warn.join("");
+  if (!result.areas.length) {
+    document.getElementById("gesamt").innerHTML = `<p>Kein Block hat zugleich ein Gewicht und ein angehaktes Merkmal.</p>`;
+  } else {
+    const head = result.areas.map((area) => `<th title="${escapeHtml(area.title)}">${escapeHtml(area.title)}</th>`).join("");
+    const body = result.rows.map((offer) => {
+      const cells = result.areas.map((area) => {
+        const selected = selectedFeatures(area).length;
+        const got = points(area, offer.id);
+        return `<td title="${got} von ${selected} Merkmalen, Gewicht ${weights[area.id]}">${formatScore(contribution(area, offer.id))}</td>`;
+      }).join("");
+      return `<tr class="${offer.score ? "stay" : "zero"}"><td>${offer.place}. ${escapeHtml(offer.name)}</td><td>${formatScore(offer.score)} von ${formatScore(result.used)}</td>${cells}</tr>`;
+    }).join("");
+    document.getElementById("gesamt").innerHTML = `<div class="rank-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+}
+
+document.body.addEventListener("change", (event) => {
+  const box = event.target.closest("input[data-check]");
+  if (!box) return;
+  checks = Object.assign({}, checks, { [box.dataset.check]: box.checked });
+  render();
+});
+
+document.body.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  if (button.dataset.area) {
+    const next = weights[button.dataset.area] + Number(button.dataset.delta);
+    weights = Object.assign({}, weights, { [button.dataset.area]: Math.max(0, Math.min(100, next)) });
+  }
+  render();
+});
+render();
+
+</script>
+</body>
+</html>
