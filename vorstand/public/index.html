@@ -78,7 +78,7 @@
     .sepa-wrap { overflow-x: auto; margin-top: 8px; }
     .sepa-wrap th, .sepa-wrap td { font-size: 13px; text-align: center; white-space: nowrap; }
     .sepa-wrap td:first-child, .sepa-wrap th:first-child { text-align: left; position: sticky; left: 0; background: #fff; }
-    .sepa-wrap tr.out td:first-child { background: #f5f5f4; }
+    .sepa-wrap tr.zero td { color: var(--muted); }
     .yes { color: #166534; }
     .no { color: #a8a29e; }
     tr.out { background: #f5f5f4; }
@@ -98,11 +98,11 @@
 
   <div class="note">
     <strong>Erster Schritt sind drei Checklisten.</strong>
-    Geschäftsstelle und IT haken K.O.-Kriterien ab. Solange in so einem Kriterium mindestens ein Haken steht, sortiert es Angebote aus. Die Kasse bewertet SEPA-Lastschrift in Punkten: jedes angehakte Merkmal zählt, die Mindestzahl legt fest, ab wann ein Angebot raus ist. Raus heißt nicht weg: die Tabelle zeigt den Grund. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+    Geschäftsstelle und IT haken K.O.-Kriterien ab. Solange in so einem Kriterium mindestens ein Haken steht, sortiert es Angebote aus. Die Kasse hakt an, welche SEPA-Merkmale sie will. Daraus wird eine Rangliste, kein Aussortieren. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
   <h2>Erster Schritt: drei Checklisten</h2>
-  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Bei Geschäftsstelle und IT reicht das für ein K.O., bis ein Testkonto das Gegenteil zeigt. Bei der Kasse fehlt dann nur dieser eine SEPA-Punkt.</p>
+  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Bei Geschäftsstelle und IT reicht das für ein K.O., bis ein Testkonto das Gegenteil zeigt. Bei der Kasse rutscht das Angebot in der SEPA-Rangliste nach unten.</p>
   <div class="role-jump">
     <a href="#liste-kasse">Checkliste Kasse</a>
     <a href="#liste-geschaeft">Checkliste Geschäftsstelle</a>
@@ -407,11 +407,8 @@ function sepaHas(offerId, featureId) {
 function sepaPoints(offerId) {
   return sepaSelected().filter((feature) => sepaHas(offerId, feature[0])).length;
 }
-function sepaShort(offerId) {
-  return sepaPoints(offerId) < sepaMin;
-}
 function survivors() {
-  return OFFERS.filter((item) => knockouts(item[0]).length === 0 && !sepaShort(item[0])).map((item) => item[0]);
+  return OFFERS.filter((item) => knockouts(item[0]).length === 0).map((item) => item[0]);
 }
 function shortlistIds(weights) {
   const alive = new Set(survivors());
@@ -427,7 +424,7 @@ function consequences(weights, ids) {
     lines.push("Mit den gesetzten Haken bleibt kein Angebot übrig. Mindestens einen Haken herausnehmen oder die Belege im Testkonto nachziehen.");
     return lines;
   }
-    lines.push("Die engere Wahl steht nur aus den Angeboten, die alle gesetzten K.O.-Kriterien und die SEPA-Mindestzahl bestehen: " + names.join(", ") + ".");
+    lines.push("Die engere Wahl steht nur aus den Angeboten, die alle gesetzten K.O.-Kriterien bestehen: " + names.join(", ") + ".");
   if (weights.api >= 25 && ids.includes("ledenboek")) lines.push("Die Schnittstelle wiegt schwer. Ledenboek bleibt dabei, weil die KI-Anbindung schon existiert. easyVerein und Webling bleiben dabei, solange sie die K.O.-Liste bestehen, weil sich darauf ein eigenes MCP bauen lässt.");
   if (weights.api <= 10) lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Es entscheiden Kasse, Abteilungen und Bedienung, und nur unter den Verbliebenen.");
   if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Punkte gibt es für einen Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung.");
@@ -439,7 +436,6 @@ function consequences(weights, ids) {
 
 let weights = Object.assign({}, PRESETS[0].weights);
 let checks = {};
-let sepaMin = 1;
 KO.forEach((item) => item.examples.forEach((_, index) => { checks[checkKey(item.id, index)] = true; }));
 SEPA_FEATURES.forEach((feature) => { checks[sepaKey(feature[0])] = true; });
 try {
@@ -447,40 +443,51 @@ try {
   if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
   const savedChecks = JSON.parse(localStorage.getItem("tvn-checks") || "null");
   if (savedChecks && Object.keys(checks).every((key) => typeof savedChecks[key] === "boolean")) checks = savedChecks;
-  const savedMin = JSON.parse(localStorage.getItem("tvn-sepa-min") || "null");
-  if (Number.isInteger(savedMin)) sepaMin = savedMin;
 } catch (_) {}
+
+function sepaRanked() {
+  const ranked = OFFERS.map((offer) => ({ id: offer[0], name: offer[1], points: sepaPoints(offer[0]) }))
+    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
+  let place = 0;
+  let last = null;
+  ranked.forEach((offer, index) => {
+    if (offer.points !== last) {
+      place = index + 1;
+      last = offer.points;
+    }
+    offer.place = place;
+  });
+  return ranked;
+}
 
 function sepaBlock() {
   const selected = sepaSelected();
-  const ranked = OFFERS.map((offer) => ({ id: offer[0], name: offer[1], points: sepaPoints(offer[0]) }))
-    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
-  const head = SEPA_FEATURES.map((feature) => `<th title="${escapeHtml(feature[1])}">${escapeHtml(feature[1])}</th>`).join("");
-  const body = ranked.map((offer) => {
-    const cells = SEPA_FEATURES.map((feature) => {
+  const toggles = SEPA_FEATURES.map((feature) => {
+    const key = sepaKey(feature[0]);
+    return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(feature[1])}</span></label>`;
+  }).join("");
+  const intro = `<section class="ko"><h3>SEPA-Lastschrift <span class="muted">${selected.length} von ${SEPA_FEATURES.length} Merkmalen</span></h3><p class="muted">Angehakt heißt: die Kasse will das. Die Rangliste zählt nur diese Merkmale. Ja und nein kommen aus öffentlichen Angaben vom 16. Oktober 2026. Die Maus auf einer Zelle zeigt den Beleg.</p>${toggles}`;
+  if (!selected.length) return `${intro}<p class="muted">Kein Merkmal angehakt. Die Rangliste erscheint, sobald die Kasse mindestens eines will.</p></section>`;
+  const head = selected.map((feature) => `<th title="${escapeHtml(feature[1])}">${escapeHtml(feature[1])}</th>`).join("");
+  const body = sepaRanked().map((offer) => {
+    const cells = selected.map((feature) => {
       const on = sepaHas(offer.id, feature[0]);
       const note = SEPA_NOTE[offer.id + ":" + feature[0]] || (on ? "Auf den gesichteten Anbieterseiten belegt." : "Auf den gesichteten Anbieterseiten nicht belegt.");
       return `<td class="${on ? "yes" : "no"}" title="${escapeHtml(note)}">${on ? "ja" : "nein"}</td>`;
     }).join("");
-    const mark = offer.points < sepaMin ? "raus" : "dabei";
-    return `<tr class="${offer.points < sepaMin ? "out" : "stay"}"><td>${escapeHtml(offer.name)}</td><td>${offer.points} von ${selected.length}</td><td>${mark}</td>${cells}</tr>`;
+    return `<tr class="${offer.points ? "stay" : "zero"}"><td>${offer.place}. ${escapeHtml(offer.name)}</td><td>${offer.points} von ${selected.length}</td>${cells}</tr>`;
   }).join("");
-  const toggles = SEPA_FEATURES.map((feature) => {
-    const key = sepaKey(feature[0]);
-    return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(feature[1])} zählt mit</span></label>`;
-  }).join("");
-  return `<section class="ko"><h3>SEPA-Lastschrift, Punkte statt alles oder nichts <span class="muted">${selected.length} Merkmale</span></h3><p class="muted">Ein Haken heißt: die Kasse will dieses Merkmal in der Punktzahl sehen. Ja und nein kommen aus öffentlichen Angaben vom 16. Oktober 2026. Die Maus auf einer Zelle zeigt den Beleg. Unter der Mindestzahl fällt ein Angebot nur bei SEPA raus, nicht schon bei einem einzelnen fehlenden Merkmal.</p><div class="weights"><span>Mindestzahl</span><button type="button" data-sepa-min="-1" ${sepaMin <= 0 ? "disabled" : ""}>−1</button><b>${sepaMin}</b><button type="button" data-sepa-min="1" ${sepaMin >= selected.length ? "disabled" : ""}>+1</button></div>${toggles}<div class="sepa-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th><th>bei der Mindestzahl</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
+  return `${intro}<div class="sepa-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
 }
 
 function render() {
-  sepaMin = Math.max(0, Math.min(sepaSelected().length, sepaMin));
   const sum = CRITERIA.reduce((total, item) => total + weights[item.key], 0);
   const active = PRESETS.find((preset) => same(preset.weights, weights));
   const ids = shortlistIds(weights);
   const names = ids.map(offerName).join(", ");
   localStorage.setItem("tvn-weights", JSON.stringify(weights));
   localStorage.setItem("tvn-checks", JSON.stringify(checks));
-  localStorage.setItem("tvn-sepa-min", JSON.stringify(sepaMin));
+  localStorage.removeItem("tvn-sepa-min");
 
   document.getElementById("ko").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
     const groups = KO.filter((item) => item.role === roleId).map((item) => {
@@ -501,12 +508,8 @@ function render() {
 
   const rows = OFFERS.map((offer) => {
     const reasons = knockouts(offer[0]);
-    const short = sepaShort(offer[0]);
-    const bits = [];
-    if (short) bits.push("SEPA: " + sepaPoints(offer[0]) + " von " + sepaSelected().length + ", Mindestzahl ist " + sepaMin + ".");
-    if (reasons.length) bits.push(reasons.map((item) => item.title + ": " + item.results[offer[0]][1]).join(" "));
-    if (!bits.length) return `<tr class="stay"><td>${escapeHtml(offer[1])}</td><td>dabei</td><td>Besteht die gesetzten K.O.-Kriterien und die SEPA-Mindestzahl.</td></tr>`;
-    return `<tr class="out"><td>${escapeHtml(offer[1])}</td><td>raus</td><td>${escapeHtml(bits.join(" "))}</td></tr>`;
+    if (!reasons.length) return `<tr class="stay"><td>${escapeHtml(offer[1])}</td><td>dabei</td><td>Besteht die gesetzten K.O.-Kriterien.</td></tr>`;
+    return `<tr class="out"><td>${escapeHtml(offer[1])}</td><td>raus</td><td>${escapeHtml(reasons.map((item) => item.title + ": " + item.results[offer[0]][1]).join(" "))}</td></tr>`;
   }).join("");
   const aliveCount = survivors().length;
   document.getElementById("ko-result").innerHTML = `<p>${aliveCount} von 10 bleiben in der weiteren Wahl. ${10 - aliveCount} sind mit den gesetzten Haken raus und stehen weiter in der Tabelle.</p><table><thead><tr><th>Angebot</th><th>Stand</th><th>Woran es liegt</th></tr></thead><tbody>${rows}</tbody></table>`;
@@ -537,12 +540,6 @@ document.body.addEventListener("change", (event) => {
 });
 
 document.body.addEventListener("click", (event) => {
-  const minButton = event.target.closest("button[data-sepa-min]");
-  if (minButton) {
-    sepaMin = Math.max(0, Math.min(sepaSelected().length, sepaMin + Number(minButton.dataset.sepaMin)));
-    render();
-    return;
-  }
   const button = event.target.closest("button");
   if (!button) return;
   if (button.dataset.preset) {
