@@ -365,6 +365,100 @@ const AREAS = [
       "bundaris:api": "Die JSON-API nennt Termine, News und Statistik. Mitglieder und Buchungen gehen per Excel, CSV und DATEV.",
       "orgo:api": "Die API liest Mitglieder, Zahlungen und Events. Ein Dateiformat für den kompletten Ausstieg ist nicht belegt."
     }
+  },
+  {
+    id: "schnittstelle",
+    role: "it",
+    title: "API und Automatisierung",
+    features: [
+      ["doku", "Öffentliche Dokumentation"],
+      ["lesen", "Mitglieder lesen"],
+      ["schreiben", "Mitglieder schreiben"],
+      ["webhooks", "Webhooks"],
+      ["spec", "OpenAPI-Spezifikation"],
+      ["mcp", "Fertige KI-Anbindung"],
+      ["nocode", "Zapier, n8n oder Plugin"],
+      ["rechte", "Schlüssel mit eingeschränkten Rechten"],
+      ["sandbox", "Testumgebung"]
+    ],
+    yes: {
+      doku: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "kurabu", "bundaris"],
+      lesen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline"],
+      schreiben: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline"],
+      webhooks: ["orgo", "campai", "digitalmembers"],
+      spec: ["ledenboek", "campai", "digitalmembers"],
+      mcp: ["ledenboek", "orgo"],
+      nocode: ["orgo", "webling", "digitalmembers", "vereinonline", "bundaris"],
+      rechte: ["ledenboek", "orgo", "easyverein", "digitalmembers", "vereinonline", "kurabu"],
+      sandbox: ["ledenboek", "webling"]
+    },
+    notes: {
+      "sewobe:doku": "Eine REST-API ist beschrieben. Die Endpoint-Liste gibt es nur auf Anfrage beim Anbieter.",
+      "sewobe:lesen": "Beschrieben ist das Auslesen mitgliedsbezogener Daten für Portale und Apps.",
+      "sewobe:schreiben": "Beschrieben ist die automatisierte Anlage von Kontakten und Beitragspositionen.",
+      "easyverein:doku": "Die Dokumentationsadresse ist öffentlich erreichbar. API-Schlüssel laufen nach 30 Tagen ab und lassen sich ab Tag 15 erneuern.",
+      "easyverein:schreiben": "Lesen und Schreiben folgen der Administratorgruppe. Import und Export sind über die API ausgenommen.",
+      "webling:nocode": "Zapier und ein WordPress-Plugin sind beschrieben. Webhooks stehen dort im Zusammenhang mit Zapier, nicht als eigene Ereignisliste.",
+      "webling:sandbox": "Eine Sandbox ist auf der Schnittstellenseite genannt.",
+      "ledenboek:sandbox": "Für Tests gibt es eigene Testsleutel.",
+      "ledenboek:mcp": "Die Entwicklerseite beschreibt eine KI-Anbindung für Claude und ChatGPT, nach Anmeldung und innerhalb der Nutzerrechte. Schreiben über diese Anbindung ist dort nicht belegt.",
+      "orgo:mcp": "Eigenes MCP, lesend und schreibend, über die REST-API. Schlüssel lassen sich auf Bereiche einschränken.",
+      "orgo:nocode": "Ein n8n-Knoten ist beschrieben.",
+      "campai:schreiben": "Der Anbieter schreibt, alle Funktionen liegen in der API. Ob die Mitgliederliste im aktuellen Stand herauskommt, im Test prüfen.",
+      "campai:rechte": "Die Entwicklerseite schreibt, die API stellt alle Funktionen ohne Einschränkung bereit.",
+      "digitalmembers:schreiben": "Schlüssel können je Modul nur lesen oder die volle Verwaltung bekommen.",
+      "digitalmembers:webhooks": "Webhooks mit Signatur, Zustellprotokoll und Testversand sind beschrieben.",
+      "vereinonline:nocode": "Ein WordPress-Plugin nutzt dieselbe API.",
+      "vereinonline:rechte": "Der API-Benutzer braucht das passende Rollenrecht, zum Beispiel Mitgliederdaten lesen.",
+      "kurabu:doku": "Öffentliche API in der Beta. Dokumentiert sind vor allem News, Abteilungen, Teams und Orte.",
+      "kurabu:lesen": "Eine Mitgliederliste ist in der öffentlichen API nicht belegt.",
+      "bundaris:doku": "Die öffentliche JSON-API nennt Termine, News und Statistik. Der API-Zugang steht in den höheren Tarifen.",
+      "bundaris:nocode": "WordPress-Plugin und iframe-Widgets, daneben die JSON-API."
+    }
+  },
+  {
+    id: "support",
+    role: "it",
+    title: "Support",
+    features: [
+      ["deutsch", "Antworten auf Deutsch"],
+      ["telefon", "Telefon für den Support"],
+      ["zeiten", "Uhrzeiten genannt"],
+      ["mail", "E-Mail oder Ticket"],
+      ["hilfe", "Öffentliches Handbuch"],
+      ["antwort", "Antwortfrist genannt"],
+      ["schulung", "Schulung oder Einführung"]
+    ],
+    yes: {
+      deutsch: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      telefon: ["easyverein", "sewobe", "vereinonline", "kurabu", "digitalmembers", "ledenboek"],
+      zeiten: ["easyverein", "sewobe", "ledenboek"],
+      mail: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris", "ledenboek", "orgo"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      antwort: ["easyverein", "kurabu", "bundaris", "ledenboek"],
+      schulung: ["sewobe", "ledenboek"]
+    },
+    notes: {
+      "orgo:deutsch": "Deutsche Produktseiten sind vorhanden. Das Kontaktformular und die Adresse contact@orgo.space stehen auf einer englischen Seite.",
+      "orgo:mail": "Kontaktformular, ersatzweise contact@orgo.space. Telefon und Uhrzeiten sind nicht genannt.",
+      "webling:telefon": "Im Impressum steht eine Telefonnummer. Supportanfragen sollen per E-Mail an support@webling.ch gehen.",
+      "webling:mail": "E-Mail-Support ist im Preis enthalten. Eine Antwortfrist ist nicht genannt.",
+      "campai:telefon": "Die Datenschutzerklärung erwähnt Anrufen und Chatten. Eine Nummer und Uhrzeiten stehen dort nicht. In der Community läuft der Support über support@campai.com.",
+      "campai:mail": "support@campai.com, dazu eine Community mit Dokumentation.",
+      "easyverein:telefon": "Telefon, E-Mail und Chat. Montag bis Donnerstag 8 bis 16 Uhr, Freitag 8 bis 14 Uhr.",
+      "easyverein:antwort": "Innerhalb der Geschäftszeiten lag die genannte durchschnittliche Antwortzeit unter 1 Stunde und 9 Minuten.",
+      "sewobe:telefon": "Telefon Montag bis Freitag 8:30 bis 12 Uhr und 13 bis 17:30 Uhr, dazu ein Serviceportal.",
+      "sewobe:schulung": "Einführungsschulung vor Ort, in Augsburg oder per TeamViewer und Telefon.",
+      "vereinonline:telefon": "Es gibt einen Telefon-Rückruf und eine E-Mail-Anfrage. Eine Hotline mit Uhrzeit ist nicht veröffentlicht. Umfassende Hilfe ist als kostenpflichtiger Dienst genannt.",
+      "kurabu:telefon": "Telefon und E-Mail sind genannt. Uhrzeiten für das Telefon stehen auf der Kontaktseite nicht.",
+      "kurabu:antwort": "Nachrichten werden in der Regel innerhalb von 24 Stunden bearbeitet.",
+      "digitalmembers:telefon": "Telefon und E-Mail sind genannt, die Anfrage geht an das kleine Team. Uhrzeiten stehen auf der Teamseite nicht.",
+      "bundaris:telefon": "Im Impressum steht eine Handynummer. Die Preistabelle nennt E-Mail-Support, je nach Tarif mit 48 oder 24 Stunden.",
+      "bundaris:antwort": "E-Mail-Support: 48 Stunden im Einstieg, 24 Stunden in den mittleren Tarifen, priorisierte Tickets im Enterprise-Tarif.",
+      "ledenboek:deutsch": "Die Supportseite ist niederländisch. Telefon werktags 9 bis 17 Uhr, ohne Warteschlange.",
+      "ledenboek:mail": "Eine Person antwortet innerhalb eines Werktags. Außerhalb der Telefonzeit und im Urlaub nur per E-Mail.",
+      "ledenboek:schulung": "Hilfe bei der Einrichtung ist eingeschlossen. Ein Schulungstermin mit Agenda ist nicht beschrieben."
+    }
   }
 ];
 const CRITERIA = [
