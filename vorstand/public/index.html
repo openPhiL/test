@@ -75,10 +75,10 @@
     .role-block { margin: 0 0 28px; }
     .check { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 8px; }
     .check input { margin-top: 4px; }
-    .sepa-wrap { overflow-x: auto; margin-top: 8px; }
-    .sepa-wrap th, .sepa-wrap td { font-size: 13px; text-align: center; white-space: nowrap; }
-    .sepa-wrap td:first-child, .sepa-wrap th:first-child { text-align: left; position: sticky; left: 0; background: #fff; }
-    .sepa-wrap tr.zero td { color: var(--muted); }
+    .rank-wrap { overflow-x: auto; margin-top: 8px; }
+    .rank-wrap th, .rank-wrap td { font-size: 13px; text-align: center; white-space: nowrap; }
+    .rank-wrap td:first-child, .rank-wrap th:first-child { text-align: left; position: sticky; left: 0; background: #fff; }
+    .rank-wrap tr.zero td { color: var(--muted); }
     .yes { color: #166534; }
     .no { color: #a8a29e; }
     tr.out { background: #f5f5f4; }
@@ -97,24 +97,21 @@
   <p class="muted">TV Neuenburg 1926 e.V. Diese Seite ist öffentlich und braucht keine Anmeldung. Die Sitzung setzt Gewichte und benennt Testkonten. Punktzahlen entstehen erst, wenn Kasse, eine Abteilungsleitung und die IT dieselben Aufgaben durchgespielt haben.</p>
 
   <div class="note">
-    <strong>Erster Schritt sind drei Checklisten.</strong>
-    Geschäftsstelle und IT haken K.O.-Kriterien ab. Solange in so einem Kriterium mindestens ein Haken steht, sortiert es Angebote aus. Die Kasse hakt an, welche SEPA-Merkmale sie will. Daraus wird eine Rangliste, kein Aussortieren. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+    <strong>Erster Schritt sind die Ranglisten.</strong>
+    Kasse, Geschäftsstelle und IT haken an, was sie wollen. Jeder Themenbereich sortiert die zehn Angebote nach den angehakten Merkmalen. Abgewähltes zählt nicht mit. Niemand fällt heraus. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
-  <h2>Erster Schritt: drei Checklisten</h2>
-  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Bei Geschäftsstelle und IT reicht das für ein K.O., bis ein Testkonto das Gegenteil zeigt. Bei der Kasse rutscht das Angebot in der SEPA-Rangliste nach unten.</p>
+  <h2>Erster Schritt: Ranglisten</h2>
+  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Es fehlt dann dieser eine Punkt, bis ein Testkonto das Gegenteil zeigt.</p>
   <div class="role-jump">
-    <a href="#liste-kasse">Checkliste Kasse</a>
-    <a href="#liste-geschaeft">Checkliste Geschäftsstelle</a>
-    <a href="#liste-it">Checkliste IT</a>
+    <a href="#liste-kasse">Kasse</a>
+    <a href="#liste-geschaeft">Geschäftsstelle</a>
+    <a href="#liste-it">IT</a>
   </div>
-  <div id="ko"></div>
-
-  <h2>Wer bei den gesetzten Haken noch dabei ist</h2>
-  <div id="ko-result"></div>
+  <div id="rankings"></div>
 
   <h2>Gewichte, die der Vorstand im Raum setzt</h2>
-  <p class="muted">Die Gewichte gelten nur noch für Angebote, die oben alle gesetzten K.O.-Kriterien bestehen. Jede Zeile ändert sich in Fünferschritten. Das ersetzt keine Testpunkte.</p>
+  <p class="muted">Die Gewichte gelten für die Punktzahl nach dem Test. Die Ranglisten oben bleiben daneben stehen. Jede Zeile ändert sich in Fünferschritten.</p>
   <div class="presets" id="presets"></div>
   <p id="bar-label" class="muted"></p>
   <div class="bar" id="bar" aria-hidden="true"></div>
@@ -145,11 +142,11 @@
   <h2>Beschlussvorlage für Sitzung zwei</h2>
   <div class="card">
     <p id="beschluss"></p>
-    <p class="muted">Wiedervorlage mit drei Spalten je Angebot: K.O. bestanden, Punktzahl 0 bis 100, Kosten über vier Jahre. Der Vorstand wählt daraus einen Piloten für eine Abteilung, parallel zum weiterlaufenden ProWinner.</p>
+    <p class="muted">Wiedervorlage mit drei Spalten je Angebot: Platz in den Ranglisten, Punktzahl aus dem Test von 0 bis 100, Kosten über vier Jahre. Der Vorstand wählt daraus einen Piloten für eine Abteilung, parallel zum weiterlaufenden ProWinner.</p>
   </div>
 
   <h2>Wenn eine Frage im Test nicht sichtbar wird</h2>
-  <p>Dafür reicht ein kurzer Fragebogen mit denselben acht Fragen an jeden verbliebenen Anbieter: Auftragsverarbeitungsvertrag, Serverstandort, Preis bei 1400 Mitgliedern über vier Jahre, enthaltene API, fertiges MCP, Bestandsmeldung Badischer Sportbund, Dauer der Datenübernahme aus ProWinner, Format des Exports bei Vertragsende. Antworten aus dem Testkonto wiegen in der Sitzung schwerer als Texte von der Website.</p>
+  <p>Dafür reicht ein kurzer Fragebogen mit denselben acht Fragen an jeden Anbieter in der engeren Wahl: Auftragsverarbeitungsvertrag, Serverstandort, Preis bei 1400 Mitgliedern über vier Jahre, enthaltene API, fertiges MCP, Bestandsmeldung Badischer Sportbund, Dauer der Datenübernahme aus ProWinner, Format des Exports bei Vertragsende. Antworten aus dem Testkonto wiegen in der Sitzung schwerer als Texte von der Website.</p>
 
   <footer>Öffentliche Ansicht für den TV Neuenburg 1926 e.V. Gewichte bleiben in diesem Browser und werden nicht an einen Server gesendet.</footer>
 </main>
@@ -166,190 +163,207 @@ const OFFERS = [
   ["kurabu", "Kurabu"],
   ["bundaris", "Bundaris"]
 ];
-const SEPA_FEATURES = [
-  ["glaeubiger", "Gläubiger-ID"],
-  ["mandat", "Mandatsreferenz"],
-  ["eltern", "Anderer Kontoinhaber"],
-  ["datei", "PAIN.008-Datei"],
-  ["format08", "pain.008.001.08"],
-  ["folge", "Erst- und Folgelastschrift"],
-  ["einmal", "Einmalig oder wiederkehrend"],
-  ["sammel", "Sammel- oder Einzelauftrag"],
-  ["direkt", "Direkt an die Bank"],
-  ["rueck", "Rücklastschrift öffnet Rechnung"],
-  ["gebuehr", "Rücklastschriftgebühr"],
-  ["auszug", "Kontoauszug zuordnen"],
-  ["familie", "Eine Lastschrift, mehrere Personen"],
-  ["pruefung", "Prüfung vor dem Download"],
-  ["vorab", "Vorabankündigung"]
-];
-const SEPA_YES = {
-  glaeubiger: ["easyverein", "webling", "sewobe", "vereinonline", "kurabu", "bundaris"],
-  mandat: ["webling", "sewobe", "ledenboek", "kurabu", "vereinonline", "bundaris", "campai"],
-  eltern: ["webling", "sewobe"],
-  datei: ["easyverein", "webling", "sewobe", "vereinonline", "bundaris", "kurabu", "ledenboek"],
-  format08: ["easyverein", "bundaris"],
-  folge: ["bundaris"],
-  einmal: ["webling"],
-  sammel: ["easyverein", "webling", "sewobe", "vereinonline"],
-  direkt: ["sewobe", "vereinonline"],
-  rueck: ["sewobe", "kurabu", "easyverein", "campai"],
-  gebuehr: ["sewobe", "campai", "kurabu"],
-  auszug: ["webling", "bundaris", "sewobe", "kurabu", "ledenboek", "vereinonline"],
-  familie: ["bundaris"],
-  pruefung: ["bundaris", "sewobe"],
-  vorab: ["bundaris", "vereinonline"]
-};
-const SEPA_NOTE = {
-  "bundaris:glaeubiger": "pain.008 setzt die Gläubiger-ID voraus. Ein eigenes Eingabefeld ist auf der Funktionsseite nicht beschrieben.",
-  "sewobe:format08": "Die Hilfe nennt für deutsche Konten noch pain.008.001.02, nicht .001.08.",
-  "vereinonline:folge": "Der Anbieter schreibt, Lastschriften werden immer als erstmalig gekennzeichnet.",
-  "webling:rueck": "Beschrieben ist ein manuelles Umbuchen und eine neue Rechnung, keine automatische Zuordnung.",
-  "campai:datei": "Belegt sind Lastschrift und Rücklastschrift-Assistent. Das Dateiformat PAIN.008 ist nicht genannt.",
-  "orgo:datei": "Zahlungen laufen über Stripe. Eine PAIN.008-Datei für die Hausbank ist nicht belegt.",
-  "digitalmembers:datei": "Belegt sind QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt."
-};
-const KO = [
+const AREAS = [
   {
-    id: "browser",
-    title: "Nur im Browser",
-    role: "it",
-    examples: [
-      "Kasse und Geschäftsstelle arbeiten gleichzeitig, eine am Küchentisch, eine im Vereinsheim, ohne dass eine Datei hin und her geschickt wird.",
-      "Auf dem Vereinsrechner im Sportheim ist nichts zu installieren. Ein aktueller Browser reicht, auch wenn dort kein Windows-Programm wie ProWinner läuft.",
-      "Die Abteilungsleitung Handball ändert eine Adresse am Handy, während die Kasse den Beitragslauf vorbereitet.",
-      "Fällt ein Laptop aus, sind Mitglieder und Mandate nicht auf dessen Festplatte gefangen."
+    id: "sepa",
+    role: "kasse",
+    title: "SEPA-Lastschrift",
+    features: [
+      ["glaeubiger", "Gläubiger-ID"],
+      ["mandat", "Mandatsreferenz"],
+      ["eltern", "Anderer Kontoinhaber"],
+      ["datei", "PAIN.008-Datei"],
+      ["format08", "pain.008.001.08"],
+      ["folge", "Erst- und Folgelastschrift"],
+      ["einmal", "Einmalig oder wiederkehrend"],
+      ["sammel", "Sammel- oder Einzelauftrag"],
+      ["direkt", "Direkt an die Bank"],
+      ["rueck", "Rücklastschrift öffnet Rechnung"],
+      ["gebuehr", "Rücklastschriftgebühr"],
+      ["auszug", "Kontoauszug zuordnen"],
+      ["familie", "Eine Lastschrift, mehrere Personen"],
+      ["pruefung", "Prüfung vor dem Download"],
+      ["vorab", "Vorabankündigung"]
     ],
-    results: {
-      ledenboek: [true, "Webanwendung, Server bei Hetzner in Deutschland."],
-      orgo: [true, "Webanwendung, Daten in der EU."],
-      easyverein: [true, "Cloud-Anwendung mit Browser und App."],
-      webling: [true, "Läuft im Browser, ausdrücklich ohne eigene App."],
-      campai: [true, "Cloud für Sportvereine, dazu eine Vereinsapp."],
-      digitalmembers: [true, "Webanwendung aus der Schweiz."],
-      sewobe: [true, "Online-VereinsMANAGER mit Portal."],
-      vereinonline: [true, "Vereinssoftware im Browser, SEPA auch per Online-Banking."],
-      kurabu: [true, "Cloud und Vereinsapp für größere Sportvereine."],
-      bundaris: [true, "Webanwendung mit Mitgliederportal."]
+    yes: {
+      glaeubiger: ["easyverein", "webling", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      mandat: ["webling", "sewobe", "ledenboek", "kurabu", "vereinonline", "bundaris", "campai"],
+      eltern: ["webling", "sewobe"],
+      datei: ["easyverein", "webling", "sewobe", "vereinonline", "bundaris", "kurabu", "ledenboek"],
+      format08: ["easyverein", "bundaris"],
+      folge: ["bundaris"],
+      einmal: ["webling"],
+      sammel: ["easyverein", "webling", "sewobe", "vereinonline"],
+      direkt: ["sewobe", "vereinonline"],
+      rueck: ["sewobe", "kurabu", "easyverein", "campai"],
+      gebuehr: ["sewobe", "campai", "kurabu"],
+      auszug: ["webling", "bundaris", "sewobe", "kurabu", "ledenboek", "vereinonline"],
+      familie: ["bundaris"],
+      pruefung: ["bundaris", "sewobe"],
+      vorab: ["bundaris", "vereinonline"]
+    },
+    notes: {
+      "bundaris:glaeubiger": "pain.008 setzt die Gläubiger-ID voraus. Ein eigenes Eingabefeld ist auf der Funktionsseite nicht beschrieben.",
+      "sewobe:format08": "Die Hilfe nennt für deutsche Konten noch pain.008.001.02, nicht .001.08.",
+      "vereinonline:folge": "Der Anbieter schreibt, Lastschriften werden immer als erstmalig gekennzeichnet.",
+      "webling:rueck": "Beschrieben ist ein manuelles Umbuchen und eine neue Rechnung, keine automatische Zuordnung.",
+      "campai:datei": "Belegt sind Lastschrift und Rücklastschrift-Assistent. Das Dateiformat PAIN.008 ist nicht genannt.",
+      "orgo:datei": "Zahlungen laufen über Stripe. Eine PAIN.008-Datei für die Hausbank ist nicht belegt.",
+      "digitalmembers:datei": "Belegt sind QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt."
     }
   },
   {
     id: "sparten",
-    title: "Mehrspartenverein",
     role: "geschaeft",
-    examples: [
-      "Eine Person ist in Turnen und in Handball. Beide Abteilungen sehen sie, der Beitrag kann je Sparte anders sein.",
-      "Aktiv, passiv, Jugend und Ehrenmitglied sind verschiedene Beitragssätze, nicht nur ein einziges Feld „Mitglied“.",
-      "Ein Haushalt: zwei Kinder im Volleyball der Abteilung Turnen, ein Elternteil zahlt einen Familienbeitrag.",
-      "Die Abteilung Tennis darf ihre Mitglieder pflegen, ohne die Beitragsklasse von Judo zu ändern.",
-      "Die Bestandsmeldung an den Badischen Sportbund zählt Personen je Sparte, ohne Doppelte als zwei Personen zu melden, wenn der Verband das so verlangt."
+    title: "Mehrspartenverein",
+    features: [
+      ["abteilungen", "Mehrere Abteilungen"],
+      ["beitraege", "Unterschiedliche Beitragssätze"],
+      ["familie", "Ein Zahler, mehrere Personen"],
+      ["verband", "Bestandsmeldung LSB/DOSB"]
     ],
-    results: {
-      ledenboek: [true, "Gruppen und Ausschüsse, dazu eine Beschreibung für Mehrspartenvereine. Einen Familienzahler über zwei Abteilungen im Test anlegen."],
-      orgo: [true, "Familien, Gruppen und Sektionen sind dokumentiert. Ob das den Abteilungen eines Turnvereins entspricht, im Test prüfen."],
-      easyverein: [true, "Gruppen, Beitrag je Mitglied oder Gruppe, Bestandserhebung für Sportvereine."],
-      webling: [true, "Mitgliedergruppen und Export im LSB/DOSB-Format. Den Familienzahler im Test anlegen."],
-      campai: [true, "Für Sportvereine gebaut, Beiträge hängen am Mitglied. Mehrere Abteilungen und einen Familienzahler im Test anlegen."],
-      digitalmembers: [false, "Gruppen sind naheliegend, mehrere deutsche Sportabteilungen und ein Familienzahler sind nicht belegt."],
-      sewobe: [false, "Kontakte und Beiträge sind beschrieben. Mehrere Abteilungen je Mitglied und ein Familienzahler sind nicht belegt."],
-      vereinonline: [true, "Mitglieder, flexible Listen und Beitrag je Mitglied oder Gruppe. Abteilungen als Gruppen im Test anlegen."],
-      kurabu: [true, "Abteilungen, Teams und Beitragsgruppen. Mehrere Sparten an einer Person im Test prüfen."],
-      bundaris: [true, "Beitragsstufen je Sparte und ein Familien-Verbund mit einem Zahler, als Summe oder als Pauschale."]
+    yes: {
+      abteilungen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      beitraege: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      familie: ["orgo", "easyverein", "sewobe", "kurabu", "bundaris"],
+      verband: ["easyverein", "webling", "campai", "kurabu"]
+    },
+    notes: {
+      "ledenboek:abteilungen": "Gruppen und Ausschüsse sind beschrieben. Einen Familienzahler nennt die gesichtete Seite nicht.",
+      "orgo:abteilungen": "Familien, Gruppen und Sektionen sind dokumentiert. Ob das den Abteilungen eines Turnvereins entspricht, im Test prüfen.",
+      "digitalmembers:abteilungen": "Gruppen entstehen aus Vereinsfeldern, zum Beispiel Aktiv und Passiv. Deutsche Sportabteilungen heißen dort nicht Abteilung.",
+      "sewobe:familie": "Die Produktseite nennt Familien. Ob ein Zahler mehrere Personen bündelt, ist dort nicht ausgeführt.",
+      "easyverein:verband": "DOSB-Statistik und LSB-Export als XML. Der Badische Sportbund ist nicht namentlich genannt.",
+      "webling:verband": "LSB/DOSB-Export für die Mitgliedermeldung in Deutschland.",
+      "campai:verband": "LSB-Export mit einem Klick. Der Badische Sportbund ist nicht namentlich genannt.",
+      "kurabu:verband": "Geführte Bestandserhebung, nach Angabe des Anbieters im Format jedes Landessportbunds. Den Badischen Sportbund im Test einmal erzeugen."
     }
   },
   {
     id: "rollen",
-    title: "Getrennte Rollen",
     role: "geschaeft",
-    examples: [
-      "Der Gesamtvorstand sieht alle Abteilungen. Die Abteilungsleitung Schwimmen sieht nicht die IBAN der Tennis-Mitglieder.",
-      "Die Kasse sieht Mandate, offene Beiträge und Mahnungen. Die Schriftführung sieht Protokolle, nicht die komplette Kontoliste.",
-      "Ein Mitglied im Portal ändert die eigene Adresse und sieht die eigenen Rechnungen, nicht die der anderen.",
-      "Nach der Wahl übernimmt die neue Kassenwartin den Zugang, ohne das Passwort der Vorgängerin weiterzubenutzen.",
-      "Ein API-Schlüssel für eine Auskunft darf lesen, aber keinen Beitragslauf starten."
+    title: "Getrennte Rollen",
+    features: [
+      ["rollen", "Eigene Rollen"],
+      ["sparte", "Nur die eigene Abteilung"],
+      ["portal", "Mitglied pflegt eigene Daten"],
+      ["lesen", "API-Schlüssel nur lesen"]
     ],
-    results: {
-      ledenboek: [true, "Rollen folgen der Funktion. Die KI-Anbindung sieht nur das, was die angemeldete Person sehen darf."],
-      orgo: [true, "Rollen im Mitgliederbestand, API-Schlüssel je Bereich nur lesen oder auch schreiben."],
-      easyverein: [true, "Administratorgruppen mit abgegrenzten Rechten. Ein API-Schlüssel erbt genau diese Gruppe."],
-      webling: [true, "Beliebig viele Benutzer. Ob eine Abteilungsleitung nur die eigene Sparte sieht, im Test prüfen."],
-      campai: [true, "Unbegrenzte Benutzer und eine Mitglieder-App. Die Trennung Vorstand gegen Abteilung im Test prüfen."],
-      digitalmembers: [true, "API-Schlüssel geben nur freigegebene Bereiche frei. Vereinsrollen im Test prüfen."],
-      sewobe: [true, "Mitgliederportal und OAuth für Drittanwendungen. Eine eigene Abteilungsrolle ist nicht belegt."],
-      vereinonline: [true, "Rechte hängen an der Rolle, zum Beispiel Mitglieder nur lesen oder auch ändern."],
-      kurabu: [true, "API-Schlüssel mit eigenen Berechtigungsstufen. Die Sicht einer Abteilungsleitung im Test prüfen."],
-      bundaris: [true, "Rollen und, für größere Organisationen, Sub-Mandanten."]
-    }
-  },
-  {
-    id: "datenschutz",
-    title: "Datenschutz",
-    role: "it",
-    examples: [
-      "Vor dem Import echter Mitglieder liegt ein Auftragsverarbeitungsvertrag vor, nicht erst eine Fußnote in der Datenschutzerklärung.",
-      "Die Server stehen in der EU oder in der Schweiz. Die Schweiz hat einen Angemessenheitsbeschluss, der Vertrag nennt den Ort trotzdem.",
-      "Ein ausgetretenes Mitglied wird gelöscht oder gesperrt, einschließlich Portalzugang. Die Buchungsbelege bleiben, soweit die Aufbewahrung das verlangt.",
-      "Auf eine Auskunftsanfrage ist benennbar, welche Abteilung welche Daten hat. Beispiel: die Abteilung Tennis und die Beitragshistorie.",
-      "Die Mitgliederliste wird nicht für Werbung des Anbieters verwendet."
-    ],
-    results: {
-      ledenboek: [true, "Server bei Hetzner in Deutschland, DSGVO genannt. Den AVV vor dem Echtimport lesen."],
-      orgo: [true, "Daten in der EU, DSGVO genannt. Den AVV im Vertrag festmachen."],
-      easyverein: [true, "Hosting in Deutschland, genannt werden Nürnberg, Falkenstein und Frankfurt."],
-      webling: [true, "Rechenzentrum in der Schweiz. AVV als Zusatzvereinbarung, Angemessenheitsbeschluss liegt vor."],
-      campai: [true, "Hosting Deutschland angegeben, der Rechenzentrumsbetreiber ist nicht belegt. AVV prüfen."],
-      digitalmembers: [true, "Schweiz, ausgerichtet am schweizerischen Datenschutzgesetz. Für deutsche Mitglieder den AVV prüfen."],
-      sewobe: [true, "Deutscher Anbieter. Serverstandort und AVV stehen in den gesichteten Seiten nicht konkret und gehören in den Vertrag."],
-      vereinonline: [true, "Hosting in Deutschland bei Ionos. Selbst-Hosting nur in einer Plus-Version."],
-      kurabu: [true, "Deutscher Anbieter. AVV und Serverstandort im Vertrag festmachen, öffentlich nicht genauer belegt."],
-      bundaris: [true, "Anbieter aus Deutschland, DSGVO-Export der Stammdaten beschrieben. AVV vor dem Import lesen."]
-    }
-  },
-  {
-    id: "ausstieg",
-    title: "Ausstieg mit den Daten",
-    role: "it",
-    examples: [
-      "Am Vertragsende kommen Mitglieder, Abteilungen, Mandate und Belege als Datei heraus, nicht nur als PDF zum Abtippen.",
-      "Die Mandatsreferenz bleibt erhalten, damit ein späterer Anbieter nicht alle Einzüge als Ersteinzug kennzeichnet.",
-      "Ein Probelauf vor der Unterschrift: 30 anonymisierte Personen hinein, wieder hinaus, und die Abteilungen stimmen noch.",
-      "Buchungsdaten lassen sich an die Kasse oder an DATEV geben, ohne im Altprogramm gefangen zu sein.",
-      "Ist der Anbieter nicht erreichbar, liegt aus dem Vertrag hervor, in welcher Frist der Export kommt."
-    ],
-    results: {
-      ledenboek: [true, "Eine Sicherungsdatei des ganzen Vereins, inklusive Anhänge, und die Buchhaltung als XAF."],
-      orgo: [true, "Die API liest Mitglieder, Zahlungen und Events. Das Dateiformat für einen kompletten Ausstieg im Test sichern."],
-      easyverein: [true, "Eine Exportfunktion ist vorgesehen. Die API-Beschreibung verweist für komplette Abzüge auf diesen Export, nicht auf die Schnittstelle."],
-      webling: [true, "Export und API-Abruf der Mitglieder. Ob Mandate und Belege vollständig dabei sind, im Test prüfen."],
-      campai: [false, "Ein vollständiger Export von Mitgliedern, Mandaten und Belegen bei Vertragsende ist nicht belegt."],
-      digitalmembers: [true, "Die API kann Mitglieder, Rechnungen und Belege lesen. Die Ausstiegsdatei im Test einmal erzeugen."],
-      sewobe: [false, "Ein vollständiger Export bei Vertragsende ist in den gesichteten Seiten nicht belegt."],
-      vereinonline: [false, "Exporte für SEPA und Buchhaltung sind belegt. Ein Gesamtabzug von Mitgliedern, Mandaten und Belegen am Vertragsende nicht."],
-      kurabu: [false, "Import aus Excel ist beschrieben. Ein vollständiger Export am Vertragsende nicht."],
-      bundaris: [false, "Excel, CSV und DATEV für Mitglieder und Buchungen. Ein zugesicherter Gesamtabzug am Vertragsende nicht."]
+    yes: {
+      rollen: ["ledenboek", "orgo", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      sparte: ["easyverein", "sewobe", "kurabu"],
+      portal: ["webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      lesen: ["ledenboek", "orgo", "easyverein", "digitalmembers", "kurabu"]
+    },
+    notes: {
+      "easyverein:sparte": "In der Dachverbandslösung sehen Abteilungsverwalter die anderen Abteilungen nicht. Jede Abteilung braucht eine eigene Lizenz.",
+      "sewobe:sparte": "Bei der Zuordnung einer Abteilung werden Adressrechte mit vergeben.",
+      "kurabu:sparte": "Das Rechtemanagement legt fest, welche Abteilungen eine Rolle sieht und bearbeitet.",
+      "digitalmembers:portal": "Mitglieder schlagen Änderungen vor. Sie gehen erst nach Freigabe live.",
+      "easyverein:lesen": "Ein API-Schlüssel erbt die Rechte seiner Administratorgruppe. Eine nur lesende Gruppe ergibt einen nur lesenden Schlüssel.",
+      "campai:lesen": "Die Entwicklerseite schreibt, die API stellt alle Funktionen ohne Einschränkung bereit.",
+      "bundaris:rollen": "Beschrieben sind Funktionen und, für größere Organisationen, Sub-Mandanten. Eine feine Abteilungsrolle steht auf der Sportseite nicht."
     }
   },
   {
     id: "deutsch",
-    title: "Deutsch",
     role: "geschaeft",
-    examples: [
-      "Menüs, Beitragsarten, Mahntexte und die SEPA-Begriffe sind auf Deutsch, nicht nur die Startseite.",
-      "Die Kasse erreicht den Support auf Deutsch, per Mail oder Telefon, ohne ein Ticket auf Englisch schreiben zu müssen.",
-      "Hilfetexte zum Lastschriftlauf erklären Gläubiger-ID, Vorlaufzeit und Rücklastschrift auf Deutsch.",
-      "Briefe und Mails an Mitglieder kommen mit deutschen Vorlagen heraus, inklusive der Vorabankündigung."
+    title: "Deutsch",
+    features: [
+      ["oberflaeche", "Oberfläche auf Deutsch"],
+      ["hilfe", "Hilfe auf Deutsch"]
     ],
-    results: {
-      ledenboek: [true, "Deutsche Oberfläche. Herkunft und Buchhaltungslogik sind niederländisch."],
-      orgo: [true, "Deutsche Seiten vorhanden. Fachbegriffe der deutschen Vereinskasse im Test gegenlesen."],
-      easyverein: [true, "Deutscher Anbieter, Oberfläche und Hilfe auf Deutsch."],
-      webling: [true, "Deutsche Oberfläche, Anbieter in der Schweiz."],
-      campai: [true, "Deutsche Oberfläche für Sportvereine."],
-      digitalmembers: [true, "Deutsch, daneben Französisch, Italienisch und Englisch. Fachsprache der Schweiz, etwa QR-Rechnung."],
-      sewobe: [true, "Deutsche Oberfläche."],
-      vereinonline: [true, "Deutsche Oberfläche und deutsche Hilfe."],
-      kurabu: [true, "Deutsche Oberfläche."],
-      bundaris: [true, "Deutsche Oberfläche."]
+    yes: {
+      oberflaeche: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      hilfe: ["easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"]
+    },
+    notes: {
+      "ledenboek:oberflaeche": "Deutsche Oberfläche. Herkunft und Buchhaltungslogik sind niederländisch.",
+      "orgo:oberflaeche": "Deutsche Seiten sind vorhanden. Eine deutsche Hilfe zum Lastschriftlauf ist nicht belegt.",
+      "digitalmembers:hilfe": "Deutsche Dokumentation. Fachsprache daneben auch schweizerisch, etwa QR-Rechnung."
+    }
+  },
+  {
+    id: "browser",
+    role: "it",
+    title: "Nur im Browser",
+    features: [
+      ["browser", "Ohne Installation im Browser"],
+      ["gleichzeitig", "Mehrere Personen gleichzeitig"],
+      ["app", "Eigene App"]
+    ],
+    yes: {
+      browser: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      gleichzeitig: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      app: ["easyverein", "campai", "kurabu"]
+    },
+    notes: {
+      "webling:app": "Webling nennt die Arbeit im Browser und ausdrücklich keine eigene App.",
+      "ledenboek:browser": "Webanwendung, Server bei Hetzner in Deutschland."
+    }
+  },
+  {
+    id: "datenschutz",
+    role: "it",
+    title: "Datenschutz",
+    features: [
+      ["standort", "Serverstandort genannt"],
+      ["betreiber", "Rechenzentrumsbetreiber genannt"]
+    ],
+    yes: {
+      standort: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline", "bundaris"],
+      betreiber: ["ledenboek", "digitalmembers", "vereinonline"]
+    },
+    notes: {
+      "ledenboek:betreiber": "Server bei Hetzner in Deutschland.",
+      "orgo:standort": "Genannt wird die EU. Ein Rechenzentrum und ein Betreiber stehen auf den gesichteten Seiten nicht.",
+      "easyverein:standort": "Genannt werden Nürnberg, Falkenstein und Frankfurt. Der Betreiber des Rechenzentrums nicht.",
+      "webling:standort": "Rechenzentrum in der Schweiz. Der Betreiber ist nicht genannt. Ein Angemessenheitsbeschluss liegt vor.",
+      "campai:standort": "Hosting Deutschland ist angegeben. Der Betreiber ist nicht genannt.",
+      "digitalmembers:betreiber": "Kubernetes bei Hetzner in Deutschland. Dediziertes Hosting in der Schweiz bietet der Anbieter nicht an.",
+      "vereinonline:betreiber": "Hosting in Deutschland bei Ionos.",
+      "bundaris:standort": "Daten in deutschen Rechenzentren. Der Betreiber ist nicht genannt.",
+      "sewobe:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht.",
+      "kurabu:standort": "Deutscher Anbieter. Serverstandort und Betreiber stehen auf den gesichteten Seiten nicht."
+    }
+  },
+  {
+    id: "ausstieg",
+    role: "it",
+    title: "Ausstieg mit den Daten",
+    features: [
+      ["mitglieder", "Mitgliederliste als Datei"],
+      ["buchhaltung", "Buchhaltungsexport"],
+      ["api", "Mitglieder über die API"],
+      ["anhaenge", "Anhänge oder Belege mit dabei"]
+    ],
+    yes: {
+      mitglieder: ["ledenboek", "easyverein", "webling", "campai", "digitalmembers", "sewobe", "kurabu", "bundaris"],
+      buchhaltung: ["ledenboek", "easyverein", "webling", "campai", "sewobe", "vereinonline", "kurabu", "bundaris"],
+      api: ["ledenboek", "orgo", "easyverein", "webling", "campai", "digitalmembers", "vereinonline"],
+      anhaenge: ["ledenboek", "webling", "campai", "digitalmembers", "kurabu"]
+    },
+    notes: {
+      "ledenboek:mitglieder": "Eine Sicherungsdatei des ganzen Vereins, inklusive Anhänge.",
+      "ledenboek:buchhaltung": "Die Buchhaltung kommt als XAF heraus, das niederländische Audit-Format.",
+      "easyverein:api": "Die API liest Mitglieder. Für einen kompletten Abzug verweist der Anbieter auf die Exportfunktion.",
+      "easyverein:buchhaltung": "DATEV-Export für EÜR oder Bilanz, mit Buchungsstapel und Stammdaten.",
+      "webling:anhaenge": "Export als Excel, CSV oder als ZIP mit Bildern und Dateien. Dazu DATEV.",
+      "campai:api": "Der Anbieter schreibt, alle Funktionen liegen in der API. Ob die Mitgliederliste im aktuellen Stand herauskommt, im Test prüfen.",
+      "campai:anhaenge": "Belege lassen sich aus der Belegübersicht als Datei exportieren.",
+      "digitalmembers:api": "Die Mitgliederliste liegt am Endpunkt /v2/member/. Der Schlüssel legt fest, welche Bereiche er sieht.",
+      "digitalmembers:anhaenge": "Alle Daten, auch Belege, sind über die API als JSON, Excel oder PDF erreichbar. Ein einzelnes Sicherungspaket ist nicht beschrieben.",
+      "sewobe:mitglieder": "Belegt ist der Export von Auswertungen als CSV oder XML.",
+      "sewobe:buchhaltung": "Die Produktseite nennt Buchhaltung und DATEV.",
+      "vereinonline:api": "Die API kann Mitglieder lesen. Ein Datei-Export der ganzen Mitgliederliste am Vertragsende ist nicht belegt.",
+      "vereinonline:buchhaltung": "DATEV-Export als Datei und als Übertragung in die DATEV-Cloud.",
+      "kurabu:mitglieder": "Die Funktionsseite nennt einen vollständigen Export aller Daten, dazu CSV und Excel.",
+      "kurabu:buchhaltung": "Rechnungsdaten eines Monats als CSV, Excel oder ASCII-Datei für DATEV.",
+      "kurabu:api": "Die öffentliche API beschreibt News, Abteilungen, Teams und Orte. Eine Mitgliederliste ist dort nicht belegt.",
+      "bundaris:mitglieder": "Die Mitgliederliste lässt sich jederzeit als Excel exportieren.",
+      "bundaris:buchhaltung": "DATEV-Export für den Steuerberater, Kontenrahmen an SKR42 orientiert.",
+      "bundaris:api": "Die JSON-API nennt Termine, News und Statistik. Mitglieder und Buchungen gehen per Excel, CSV und DATEV.",
+      "orgo:api": "Die API liest Mitglieder, Zahlungen und Events. Ein Dateiformat für den kompletten Ausstieg ist nicht belegt."
     }
   }
 ];
@@ -383,51 +397,47 @@ const ROLES = [
   ["geschaeft", "Geschäftsstelle", "liste-geschaeft"],
   ["it", "IT", "liste-it"]
 ];
-function checkKey(criterionId, index) {
-  return criterionId + ":" + index;
+function featureKey(area, featureId) {
+  return area.id + ":" + featureId;
 }
-function criterionOn(item) {
-  return item.examples.some((_, index) => checks[checkKey(item.id, index)]);
+function selectedFeatures(area) {
+  return area.features.filter((feature) => checks[featureKey(area, feature[0])]);
 }
-function activeKos() {
-  return KO.filter(criterionOn);
+function hasFeature(area, offerId, featureId) {
+  return area.yes[featureId].includes(offerId);
 }
-function knockouts(id) {
-  return activeKos().filter((item) => !item.results[id][0]);
+function points(area, offerId) {
+  return selectedFeatures(area).filter((feature) => hasFeature(area, offerId, feature[0])).length;
 }
-function sepaKey(featureId) {
-  return "sepa:" + featureId;
-}
-function sepaSelected() {
-  return SEPA_FEATURES.filter((feature) => checks[sepaKey(feature[0])]);
-}
-function sepaHas(offerId, featureId) {
-  return SEPA_YES[featureId].includes(offerId);
-}
-function sepaPoints(offerId) {
-  return sepaSelected().filter((feature) => sepaHas(offerId, feature[0])).length;
-}
-function survivors() {
-  return OFFERS.filter((item) => knockouts(item[0]).length === 0).map((item) => item[0]);
+function ranked(area) {
+  const rows = OFFERS.map((offer) => ({ id: offer[0], name: offer[1], points: points(area, offer[0]) }))
+    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
+  let place = 0;
+  let last = null;
+  rows.forEach((offer, index) => {
+    if (offer.points !== last) {
+      place = index + 1;
+      last = offer.points;
+    }
+    offer.place = place;
+  });
+  return rows;
 }
 function shortlistIds(weights) {
-  const alive = new Set(survivors());
   const order = weights.api >= 25
     ? ["easyverein", "webling", "ledenboek", "campai", "kurabu", "bundaris", "vereinonline", "orgo", "digitalmembers", "sewobe"]
     : ["easyverein", "webling", "campai", "kurabu", "bundaris", "vereinonline", "ledenboek", "orgo", "digitalmembers", "sewobe"];
-  return order.filter((id) => alive.has(id)).slice(0, 3);
+  return order.slice(0, 3);
 }
 function consequences(weights, ids) {
   const names = ids.map(offerName);
-  const lines = [];
-  if (!names.length) {
-    lines.push("Mit den gesetzten Haken bleibt kein Angebot übrig. Mindestens einen Haken herausnehmen oder die Belege im Testkonto nachziehen.");
-    return lines;
-  }
-    lines.push("Die engere Wahl steht nur aus den Angeboten, die alle gesetzten K.O.-Kriterien bestehen: " + names.join(", ") + ".");
-  if (weights.api >= 25 && ids.includes("ledenboek")) lines.push("Die Schnittstelle wiegt schwer. Ledenboek bleibt dabei, weil die KI-Anbindung schon existiert. easyVerein und Webling bleiben dabei, solange sie die K.O.-Liste bestehen, weil sich darauf ein eigenes MCP bauen lässt.");
-  if (weights.api <= 10) lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Es entscheiden Kasse, Abteilungen und Bedienung, und nur unter den Verbliebenen.");
-  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Punkte gibt es für einen Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung.");
+  const lines = [
+    "Unter dieser Gewichtung öffnet man zuerst Testkonten bei " + names.join(", ") + ".",
+    "Die Ranglisten oben bleiben daneben stehen. Sie ändern diese drei Namen nicht."
+  ];
+  if (weights.api >= 25 && ids.includes("ledenboek")) lines.push("Die Schnittstelle wiegt schwer. Ledenboek rückt nach vorn, weil die KI-Anbindung schon existiert. easyVerein und Webling bleiben vorn, weil sich darauf ein eigenes MCP bauen lässt.");
+  if (weights.api <= 10) lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Es entscheiden Kasse, Abteilungen und Bedienung.");
+  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Im Test zählt ein Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung.");
   if (weights.bedienung >= 30) lines.push("Bedienung zählt erst, nachdem je eine Person aus der Kasse und aus einer Abteilung dieselben Aufgaben ohne IT-Begleitung zu Ende bringt.");
   if (weights.abteilung >= 20) lines.push("Die Bestandsmeldung an den Badischen Sportbund ist eine Pflichtaufgabe im Test.");
   lines.push("Die Kosten laufen als eigene Rechnung über vier Jahre neben der Punktzahl: Lizenzen, einmalige Übernahme, Schulung, Gebühren der Zahlungswege und der Aufwand für einen späteren Wechsel.");
@@ -436,8 +446,7 @@ function consequences(weights, ids) {
 
 let weights = Object.assign({}, PRESETS[0].weights);
 let checks = {};
-KO.forEach((item) => item.examples.forEach((_, index) => { checks[checkKey(item.id, index)] = true; }));
-SEPA_FEATURES.forEach((feature) => { checks[sepaKey(feature[0])] = true; });
+AREAS.forEach((area) => area.features.forEach((feature) => { checks[featureKey(area, feature[0])] = true; }));
 try {
   const saved = JSON.parse(localStorage.getItem("tvn-weights") || "null");
   if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
@@ -445,39 +454,24 @@ try {
   if (savedChecks && Object.keys(checks).every((key) => typeof savedChecks[key] === "boolean")) checks = savedChecks;
 } catch (_) {}
 
-function sepaRanked() {
-  const ranked = OFFERS.map((offer) => ({ id: offer[0], name: offer[1], points: sepaPoints(offer[0]) }))
-    .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
-  let place = 0;
-  let last = null;
-  ranked.forEach((offer, index) => {
-    if (offer.points !== last) {
-      place = index + 1;
-      last = offer.points;
-    }
-    offer.place = place;
-  });
-  return ranked;
-}
-
-function sepaBlock() {
-  const selected = sepaSelected();
-  const toggles = SEPA_FEATURES.map((feature) => {
-    const key = sepaKey(feature[0]);
+function areaBlock(area) {
+  const selected = selectedFeatures(area);
+  const toggles = area.features.map((feature) => {
+    const key = featureKey(area, feature[0]);
     return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(feature[1])}</span></label>`;
   }).join("");
-  const intro = `<section class="ko"><h3>SEPA-Lastschrift <span class="muted">${selected.length} von ${SEPA_FEATURES.length} Merkmalen</span></h3><p class="muted">Angehakt heißt: die Kasse will das. Die Rangliste zählt nur diese Merkmale. Ja und nein kommen aus öffentlichen Angaben vom 16. Oktober 2026. Die Maus auf einer Zelle zeigt den Beleg.</p>${toggles}`;
-  if (!selected.length) return `${intro}<p class="muted">Kein Merkmal angehakt. Die Rangliste erscheint, sobald die Kasse mindestens eines will.</p></section>`;
+  const intro = `<section class="ko"><h3>${escapeHtml(area.title)} <span class="muted">${selected.length} von ${area.features.length} Merkmalen</span></h3><p class="muted">Angehakt zählt mit. Ja und nein stammen von den öffentlichen Seiten, Stand 16. Oktober 2026.</p>${toggles}`;
+  if (!selected.length) return `${intro}<p class="muted">Kein Merkmal angehakt. Die Rangliste erscheint, sobald mindestens eines an ist.</p></section>`;
   const head = selected.map((feature) => `<th title="${escapeHtml(feature[1])}">${escapeHtml(feature[1])}</th>`).join("");
-  const body = sepaRanked().map((offer) => {
+  const body = ranked(area).map((offer) => {
     const cells = selected.map((feature) => {
-      const on = sepaHas(offer.id, feature[0]);
-      const note = SEPA_NOTE[offer.id + ":" + feature[0]] || (on ? "Auf den gesichteten Anbieterseiten belegt." : "Auf den gesichteten Anbieterseiten nicht belegt.");
+      const on = hasFeature(area, offer.id, feature[0]);
+      const note = area.notes[offer.id + ":" + feature[0]] || (on ? "Auf den gesichteten Anbieterseiten belegt." : "Auf den gesichteten Anbieterseiten nicht belegt.");
       return `<td class="${on ? "yes" : "no"}" title="${escapeHtml(note)}">${on ? "ja" : "nein"}</td>`;
     }).join("");
     return `<tr class="${offer.points ? "stay" : "zero"}"><td>${offer.place}. ${escapeHtml(offer.name)}</td><td>${offer.points} von ${selected.length}</td>${cells}</tr>`;
   }).join("");
-  return `${intro}<div class="sepa-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
+  return `${intro}<div class="rank-wrap"><table><thead><tr><th>Angebot</th><th>Punkte</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
 }
 
 function render() {
@@ -489,30 +483,10 @@ function render() {
   localStorage.setItem("tvn-checks", JSON.stringify(checks));
   localStorage.removeItem("tvn-sepa-min");
 
-  document.getElementById("ko").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
-    const groups = KO.filter((item) => item.role === roleId).map((item) => {
-      const onCount = item.examples.filter((_, index) => checks[checkKey(item.id, index)]).length;
-      const dropped = OFFERS.filter((offer) => criterionOn(item) && !item.results[offer[0]][0]).map((offer) => offer[1]);
-      const dropText = onCount
-        ? (dropped.length ? "Solange mindestens ein Haken steht, fallen daran raus: " + dropped.join(", ") + "." : "Die gesetzten Haken sortieren hier niemanden aus.")
-        : "Alle Haken sind aus. Dieses Kriterium sortiert gerade niemanden aus.";
-      const items = item.examples.map((example, index) => {
-        const key = checkKey(item.id, index);
-        return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(example)}</span></label>`;
-      }).join("");
-      return `<section class="ko"><h3>${escapeHtml(item.title)} <span class="muted">${onCount} von ${item.examples.length}</span></h3>${items}<p class="drop muted">${escapeHtml(dropText)}</p></section>`;
-    }).join("");
-    const extra = roleId === "kasse" ? sepaBlock() : "";
-    return `<section class="role-block" id="${anchor}"><h2>Checkliste ${escapeHtml(roleLabel)}</h2>${extra}${groups}</section>`;
+  document.getElementById("rankings").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
+    const blocks = AREAS.filter((area) => area.role === roleId).map(areaBlock).join("");
+    return `<section class="role-block" id="${anchor}"><h2>${escapeHtml(roleLabel)}</h2>${blocks}</section>`;
   }).join("");
-
-  const rows = OFFERS.map((offer) => {
-    const reasons = knockouts(offer[0]);
-    if (!reasons.length) return `<tr class="stay"><td>${escapeHtml(offer[1])}</td><td>dabei</td><td>Besteht die gesetzten K.O.-Kriterien.</td></tr>`;
-    return `<tr class="out"><td>${escapeHtml(offer[1])}</td><td>raus</td><td>${escapeHtml(reasons.map((item) => item.title + ": " + item.results[offer[0]][1]).join(" "))}</td></tr>`;
-  }).join("");
-  const aliveCount = survivors().length;
-  document.getElementById("ko-result").innerHTML = `<p>${aliveCount} von 10 bleiben in der weiteren Wahl. ${10 - aliveCount} sind mit den gesetzten Haken raus und stehen weiter in der Tabelle.</p><table><thead><tr><th>Angebot</th><th>Stand</th><th>Woran es liegt</th></tr></thead><tbody>${rows}</tbody></table>`;
 
   document.getElementById("presets").innerHTML = PRESETS.map((preset) =>
     `<button type="button" data-preset="${preset.id}" aria-pressed="${active && active.id === preset.id}">${preset.label}</button>`
@@ -525,11 +499,9 @@ function render() {
   document.getElementById("weights").innerHTML = CRITERIA.map((item) =>
     `<div class="weight"><span>${item.label}</span><button type="button" data-key="${item.key}" data-delta="-5" ${weights[item.key] <= 0 ? "disabled" : ""}>−5</button><b>${weights[item.key]}</b><button type="button" data-key="${item.key}" data-delta="5" ${weights[item.key] >= 40 ? "disabled" : ""}>+5</button></div>`
   ).join("");
-  document.getElementById("shortlist").innerHTML = `<strong>${names || "Niemand"}</strong>`;
+  document.getElementById("shortlist").innerHTML = `<strong>${names}</strong>`;
   document.getElementById("consequences").innerHTML = consequences(weights, ids).map((line) => `<p>${escapeHtml(line)}</p>`).join("");
-  document.getElementById("beschluss").textContent = names
-    ? `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`
-    : "Mit den gesetzten K.O.-Kriterien bleibt kein Angebot übrig. Der Vorstand ändert die Haken, bevor ein Prüfauftrag beschlossen wird.";
+  document.getElementById("beschluss").textContent = `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`;
 }
 
 document.body.addEventListener("change", (event) => {
@@ -553,6 +525,7 @@ document.body.addEventListener("click", (event) => {
   render();
 });
 render();
+
 </script>
 </body>
 </html>
