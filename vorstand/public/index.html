@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vergleich für den Vorstand · TV Neuenburg 1926 e.V.</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --bg: #fafaf9;
+      --card: #ffffff;
+      --accent: #1d4ed8;
+      --warn-bg: #fffbeb;
+      --warn-ink: #92400e;
+      --info-bg: #eff6ff;
+      --info-ink: #1e3a8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.5 "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
+    h2 { font-size: 20px; margin: 36px 0 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    .note {
+      background: var(--info-bg);
+      color: var(--info-ink);
+      border: 1px solid #bfdbfe;
+      padding: 14px 16px;
+      margin: 20px 0;
+    }
+    .warn {
+      background: var(--warn-bg);
+      color: var(--warn-ink);
+      border: 1px solid #fcd34d;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .bar { display: flex; height: 14px; background: var(--line); margin: 8px 0 16px; }
+    .bar span { display: block; height: 100%; }
+    .presets, .weights { display: flex; flex-wrap: wrap; gap: 8px; }
+    button {
+      font: inherit;
+      border: 1px solid #d6d3d1;
+      background: white;
+      color: var(--ink);
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] { background: var(--ink); color: white; border-color: var(--ink); }
+    button:disabled { opacity: 0.4; cursor: default; }
+    .weight { display: flex; align-items: center; gap: 8px; min-width: 280px; }
+    .weight b { width: 28px; text-align: right; }
+    .weight span { width: 190px; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    table { width: 100%; border-collapse: collapse; background: var(--card); }
+    th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+    th { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .card { background: var(--card); border: 1px solid var(--line); padding: 16px; }
+    footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
+    @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: white; }
+      button { display: none; }
+      .note, .warn, .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Vergleich, den der Vorstand mitgehen kann</h1>
+  <p class="muted">TV Neuenburg 1926 e.V. Diese Seite ist öffentlich und braucht keine Anmeldung. Die Sitzung setzt Gewichte und benennt Testkonten. Punktzahlen entstehen erst, wenn Kasse, eine Abteilungsleitung und die IT dieselben Aufgaben durchgespielt haben.</p>
+
+  <div class="note">
+    <strong>Zwei kurze Sitzungen.</strong>
+    Sitzung eins, etwa 45 Minuten: K.O.-Kriterien und die Gewichte unten.
+    Danach testen Kasse, eine Abteilungsleitung und die IT dieselben fünf Aufgaben.
+    Sitzung zwei, etwa 45 Minuten: Punkte, Kosten über vier Jahre, Beschluss über einen Piloten.
+  </div>
+
+  <h2>Drei Schritte</h2>
+  <p>Zuerst die K.O.-Liste. Ein Angebot, das dort scheitert, bekommt keine Punkte. Danach dieselben fünf Aufgaben in jedem verbliebenen Testkonto, mit Uhr und mit einer Person, die das System zum ersten Mal sieht. Zuletzt die Nutzwertanalyse: je Kriterium 0 bis 3 Punkte, mal Gewicht, geteilt durch 3. Das ergibt eine Skala von 0 bis 100. Die Kostenrechnung steht daneben und wird nicht in die Punkte eingerechnet.</p>
+  <table>
+    <thead><tr><th>Punkte</th><th>Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Die Aufgabe ist nicht möglich</td></tr>
+      <tr><td>1</td><td>Nur mit Hotline, Umweg oder Export und Nacharbeit</td></tr>
+      <tr><td>2</td><td>Gangbar, nach einer Einweisung</td></tr>
+      <tr><td>3</td><td>Die zuständige Person schafft es allein in der Zielzeit</td></tr>
+    </tbody>
+  </table>
+
+  <h2>K.O.-Kriterien vor jeder Punktzahl</h2>
+  <table>
+    <thead><tr><th>Muss bestehen</th><th>Woran es festgemacht wird</th><th>Wer prüft</th></tr></thead>
+    <tbody>
+      <tr><td>Nur im Browser</td><td>Keine Installation auf einem Vereinsrechner</td><td>IT</td></tr>
+      <tr><td>SEPA-Lastschrift</td><td>Mandat, PAIN.008-Datei, Rücklastschrift</td><td>Kasse</td></tr>
+      <tr><td>Mehrspartenverein</td><td>Ein Mitglied in mehreren Abteilungen, Familienbeitrag</td><td>Geschäftsstelle</td></tr>
+      <tr><td>Rollen</td><td>Gesamtvorstand, Abteilungsleitung, Kasse und Mitglied sehen Unterschiedliches</td><td>Vorstand</td></tr>
+      <tr><td>Datenschutz</td><td>AVV, Server in der EU oder in der Schweiz, Lösch- und Auskunftsweg</td><td>Vorstand</td></tr>
+      <tr><td>Ausstieg</td><td>Vollständiger Export von Mitgliedern, Mandaten und Belegen</td><td>IT</td></tr>
+      <tr><td>Deutsch</td><td>Oberfläche und Support auf Deutsch</td><td>Vorstand</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Gewichte, die der Vorstand im Raum setzt</h2>
+  <p class="muted">Vorschlag für den Start. Jede Zeile ändert sich in Fünferschritten. Die engere Wahl folgt der Gewichtung und ersetzt keine Testpunkte. Stand der Produktlage: 16. Oktober 2026, aus öffentlichen Angaben, ohne eigene Tests.</p>
+  <div class="presets" id="presets"></div>
+  <p id="bar-label" class="muted"></p>
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div id="sum-warn"></div>
+  <div class="layout">
+    <div id="weights" class="weights"></div>
+    <div class="card">
+      <h3>Engere Wahl bei dieser Gewichtung</h3>
+      <p id="shortlist"><strong></strong></p>
+      <div id="consequences" class="muted"></div>
+    </div>
+  </div>
+
+  <h2>Dieselben fünf Aufgaben in jedem Testkonto</h2>
+  <p>Datenbasis ist ein anonymisierter Auszug von etwa 30 Mitgliedern aus ProWinner: Familien, zwei Abteilungen, ein offener Beitrag, ein beendeter Status. Die Uhr stoppt, wenn die Person die Hotline braucht.</p>
+  <table>
+    <thead><tr><th>Aufgabe</th><th>Fertig, wenn</th><th>Wer</th><th>Ziel</th></tr></thead>
+    <tbody>
+      <tr><td>Bestand übernehmen</td><td>30 Personen sind drin, Dubletten sind erkannt, Abteilungen stimmen</td><td>IT mit Geschäftsstelle</td><td>45 Min.</td></tr>
+      <tr><td>Familie und Beitrag</td><td>Ein Haushalt, zwei Abteilungen, zwei Beitragssätze, ein Zahler</td><td>Kasse</td><td>20 Min.</td></tr>
+      <tr><td>Lastschrift</td><td>SEPA-Datei für ein Quartal, eine Rücklastschrift, eine Mahnung</td><td>Kasse</td><td>30 Min.</td></tr>
+      <tr><td>Auskunft</td><td>Wer ist dieses Jahr zur Abteilung Handball gekommen und hat noch nicht gezahlt</td><td>Abteilungsleitung, danach IT per API</td><td>10 Min.</td></tr>
+      <tr><td>Meldung und Ausstieg</td><td>Datei für den Badischen Sportbund und ein kompletter Export</td><td>Geschäftsstelle und IT</td><td>30 Min.</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Die vierte Aufgabe ist die Brücke zur Automatisierung. Zuerst löst sie ein Mensch in der Oberfläche, danach die IT über die API oder das MCP.</p>
+
+  <h2>Beschlussvorlage für Sitzung zwei</h2>
+  <div class="card">
+    <p id="beschluss"></p>
+    <p class="muted">Wiedervorlage mit drei Spalten je Angebot: K.O. bestanden, Punktzahl 0 bis 100, Kosten über vier Jahre. Der Vorstand wählt daraus einen Piloten für eine Abteilung, parallel zum weiterlaufenden ProWinner.</p>
+  </div>
+
+  <h2>Wenn eine Frage im Test nicht sichtbar wird</h2>
+  <p>Dafür reicht ein kurzer Fragebogen mit denselben acht Fragen an jeden verbliebenen Anbieter: Auftragsverarbeitungsvertrag, Serverstandort, Preis bei 1400 Mitgliedern über vier Jahre, enthaltene API, fertiges MCP, Bestandsmeldung Badischer Sportbund, Dauer der Datenübernahme aus ProWinner, Format des Exports bei Vertragsende. Antworten aus dem Testkonto wiegen in der Sitzung schwerer als Texte von der Website.</p>
+
+  <footer>Öffentliche Ansicht für den TV Neuenburg 1926 e.V. Gewichte bleiben in diesem Browser und werden nicht an einen Server gesendet.</footer>
+</main>
+<script>
+const CRITERIA = [
+  { key: "kasse", label: "Beiträge und Kasse", color: "#1d4ed8" },
+  { key: "bedienung", label: "Bedienung im Ehrenamt", color: "#15803d" },
+  { key: "abteilung", label: "Abteilungen und BSB", color: "#c2410c" },
+  { key: "datenschutz", label: "Datenschutz und Ausstieg", color: "#57534e" },
+  { key: "api", label: "API und Automatisierung", color: "#6d28d9" },
+  { key: "kosten", label: "Kosten über vier Jahre", color: "#a16207" }
+];
+const PRESETS = [
+  { id: "balanced", label: "Ausgeglichen", weights: { kasse: 25, bedienung: 20, abteilung: 15, datenschutz: 15, api: 15, kosten: 10 } },
+  { id: "kasse", label: "Kasse führt", weights: { kasse: 35, bedienung: 20, abteilung: 15, datenschutz: 10, api: 10, kosten: 10 } },
+  { id: "ehrenamt", label: "Ehrenamt führt", weights: { kasse: 20, bedienung: 35, abteilung: 15, datenschutz: 10, api: 5, kosten: 15 } },
+  { id: "api", label: "Schnittstelle führt", weights: { kasse: 20, bedienung: 15, abteilung: 10, datenschutz: 15, api: 30, kosten: 10 } },
+  { id: "verband", label: "Verband und Daten", weights: { kasse: 20, bedienung: 15, abteilung: 25, datenschutz: 25, api: 10, kosten: 5 } }
+];
+
+function same(a, b) {
+  return CRITERIA.every((item) => a[item.key] === b[item.key]);
+}
+function shortlist(weights) {
+  if (weights.api >= 25) return "easyVerein, Webling und Ledenboek";
+  return "easyVerein, Webling und campai";
+}
+function consequences(weights) {
+  const lines = [];
+  if (weights.api >= 25) {
+    lines.push("Schnittstellen wiegen schwer. In der engeren Wahl bleiben easyVerein und Webling, weil sich darauf ein eigenes MCP bauen lässt, und Ledenboek, weil die KI-Anbindung schon existiert. Kurabu und Bundaris fallen heraus. Orgo bleibt nur im Raum, wenn der Vorstand Kartenzahlung über Stripe anstelle einer SEPA-Datei akzeptiert.");
+  } else if (weights.api <= 10) {
+    lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Die engere Wahl richtet sich nach Kasse, Abteilungen und Bedienung: easyVerein, Webling und campai. Ledenboek kommt dazu, sobald SEPA-Datei und Bestandsmeldung im selben Test bestehen.");
+  } else {
+    lines.push("Die Schnittstelle bleibt ein festes Kriterium mit mittlerem Gewicht. Geprüft werden easyVerein, Webling und campai. Ledenboek liegt als MCP-Pilot daneben und steigt auf, wenn der Vorstand das Gewicht für Automatisierung anhebt.");
+  }
+  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Punkte gibt es für einen Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung an einem Auszug von echten, anonymisierten Fällen.");
+  if (weights.bedienung >= 30) lines.push("Bedienung zählt erst, nachdem je eine Person aus der Kasse und aus einer Abteilung dieselben Aufgaben ohne IT-Begleitung zu Ende bringt.");
+  if (weights.abteilung >= 20) lines.push("Die Bestandsmeldung an den Badischen Sportbund ist eine Pflichtaufgabe im Test. Ein CSV-Export erhält Teilpunkte, wenn die Geschäftsstelle den weiteren Weg selbst tragen kann.");
+  if (weights.datenschutz >= 20) lines.push("Auftragsverarbeitung, Serverstandort und ein vollständiger Export am Vertragsende werden als K.O.-Kriterium behandelt. Webling bleibt prüfbar, das Hosting in der Schweiz wird dabei ausdrücklich mitbeschlossen.");
+  lines.push("Die Kosten laufen als eigene Rechnung über vier Jahre neben der Punktzahl: Lizenzen, einmalige Übernahme, Schulung, Gebühren der Zahlungswege und der Aufwand für einen späteren Wechsel.");
+  return lines;
+}
+
+let weights = Object.assign({}, PRESETS[0].weights);
+try {
+  const saved = JSON.parse(localStorage.getItem("tvn-weights") || "null");
+  if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
+} catch (_) {}
+
+function render() {
+  const sum = CRITERIA.reduce((total, item) => total + weights[item.key], 0);
+  const active = PRESETS.find((preset) => same(preset.weights, weights));
+  const names = shortlist(weights);
+  localStorage.setItem("tvn-weights", JSON.stringify(weights));
+
+  document.getElementById("presets").innerHTML = PRESETS.map((preset) =>
+    `<button type="button" data-preset="${preset.id}" aria-pressed="${active && active.id === preset.id}">${preset.label}</button>`
+  ).join("");
+  document.getElementById("bar-label").textContent = `${active ? active.label : "Eigene Gewichtung"} · ${sum} von 100`;
+  document.getElementById("bar").innerHTML = CRITERIA.map((item) =>
+    `<span style="width:${(weights[item.key] / Math.max(sum, 100)) * 100}%;background:${item.color}" title="${item.label}: ${weights[item.key]}"></span>`
+  ).join("");
+  document.getElementById("sum-warn").innerHTML = sum === 100 ? "" : `<div class="warn"><strong>Summe ist nicht 100.</strong> Vor dem Beschluss die Gewichte auf 100 bringen. Sonst sind die Punktzahlen der nächsten Sitzung nicht vergleichbar.</div>`;
+  document.getElementById("weights").innerHTML = CRITERIA.map((item) =>
+    `<div class="weight"><span>${item.label}</span><button type="button" data-key="${item.key}" data-delta="-5" ${weights[item.key] <= 0 ? "disabled" : ""}>−5</button><b>${weights[item.key]}</b><button type="button" data-key="${item.key}" data-delta="5" ${weights[item.key] >= 40 ? "disabled" : ""}>+5</button></div>`
+  ).join("");
+  document.getElementById("shortlist").innerHTML = `<strong>${names}</strong>`;
+  document.getElementById("consequences").innerHTML = consequences(weights).map((line) => `<p>${line}</p>`).join("");
+  document.getElementById("beschluss").textContent = `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`;
+}
+
+document.body.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  if (button.dataset.preset) {
+    const preset = PRESETS.find((item) => item.id === button.dataset.preset);
+    weights = Object.assign({}, preset.weights);
+  }
+  if (button.dataset.key) {
+    const next = weights[button.dataset.key] + Number(button.dataset.delta);
+    weights = Object.assign({}, weights, { [button.dataset.key]: Math.max(0, Math.min(40, next)) });
+  }
+  render();
+});
+render();
+</script>
+</body>
+</html>
