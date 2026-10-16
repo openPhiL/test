@@ -65,7 +65,13 @@
     table { width: 100%; border-collapse: collapse; background: var(--card); }
     th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
     th { font-size: 13px; color: var(--muted); font-weight: 600; }
-    .card { background: var(--card); border: 1px solid var(--line); padding: 16px; }
+    .card, .ko { background: var(--card); border: 1px solid var(--line); padding: 16px; }
+    .ko { margin: 0 0 12px; }
+    .ko .head { display: flex; gap: 10px; align-items: flex-start; font-weight: 650; }
+    .ko ul { margin: 8px 0 0 28px; padding: 0; }
+    .ko li { margin: 0 0 4px; }
+    .ko .drop { margin: 10px 0 0 28px; }
+    tr.out { background: #f5f5f4; }
     footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
     @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
     @media print {
@@ -81,40 +87,19 @@
   <p class="muted">TV Neuenburg 1926 e.V. Diese Seite ist öffentlich und braucht keine Anmeldung. Die Sitzung setzt Gewichte und benennt Testkonten. Punktzahlen entstehen erst, wenn Kasse, eine Abteilungsleitung und die IT dieselben Aufgaben durchgespielt haben.</p>
 
   <div class="note">
-    <strong>Zwei kurze Sitzungen.</strong>
-    Sitzung eins, etwa 45 Minuten: K.O.-Kriterien und die Gewichte unten.
-    Danach testen Kasse, eine Abteilungsleitung und die IT dieselben fünf Aufgaben.
-    Sitzung zwei, etwa 45 Minuten: Punkte, Kosten über vier Jahre, Beschluss über einen Piloten.
+    <strong>Erster Schritt ist die K.O.-Liste.</strong>
+    Ein Haken bedeutet: dieses Kriterium gilt. Ein Angebot ohne belegtes Bestehen fällt aus der weiteren Wahl. Es verschwindet nicht, der Grund steht in der Tabelle direkt darunter. Haken wegnehmen holt es zurück. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
-  <h2>Drei Schritte</h2>
-  <p>Zuerst die K.O.-Liste. Ein Angebot, das dort scheitert, bekommt keine Punkte. Danach dieselben fünf Aufgaben in jedem verbliebenen Testkonto, mit Uhr und mit einer Person, die das System zum ersten Mal sieht. Zuletzt die Nutzwertanalyse: je Kriterium 0 bis 3 Punkte, mal Gewicht, geteilt durch 3. Das ergibt eine Skala von 0 bis 100. Die Kostenrechnung steht daneben und wird nicht in die Punkte eingerechnet.</p>
-  <table>
-    <thead><tr><th>Punkte</th><th>Bedeutung</th></tr></thead>
-    <tbody>
-      <tr><td>0</td><td>Die Aufgabe ist nicht möglich</td></tr>
-      <tr><td>1</td><td>Nur mit Hotline, Umweg oder Export und Nacharbeit</td></tr>
-      <tr><td>2</td><td>Gangbar, nach einer Einweisung</td></tr>
-      <tr><td>3</td><td>Die zuständige Person schafft es allein in der Zielzeit</td></tr>
-    </tbody>
-  </table>
+  <h2>Erster Schritt: K.O.-Liste</h2>
+  <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Für ein K.O. reicht das trotzdem zum Aussortieren, bis ein Testkonto das Gegenteil zeigt.</p>
+  <div id="ko"></div>
 
-  <h2>K.O.-Kriterien vor jeder Punktzahl</h2>
-  <table>
-    <thead><tr><th>Muss bestehen</th><th>Woran es festgemacht wird</th><th>Wer prüft</th></tr></thead>
-    <tbody>
-      <tr><td>Nur im Browser</td><td>Keine Installation auf einem Vereinsrechner</td><td>IT</td></tr>
-      <tr><td>SEPA-Lastschrift</td><td>Mandat, PAIN.008-Datei, Rücklastschrift</td><td>Kasse</td></tr>
-      <tr><td>Mehrspartenverein</td><td>Ein Mitglied in mehreren Abteilungen, Familienbeitrag</td><td>Geschäftsstelle</td></tr>
-      <tr><td>Rollen</td><td>Gesamtvorstand, Abteilungsleitung, Kasse und Mitglied sehen Unterschiedliches</td><td>Vorstand</td></tr>
-      <tr><td>Datenschutz</td><td>AVV, Server in der EU oder in der Schweiz, Lösch- und Auskunftsweg</td><td>Vorstand</td></tr>
-      <tr><td>Ausstieg</td><td>Vollständiger Export von Mitgliedern, Mandaten und Belegen</td><td>IT</td></tr>
-      <tr><td>Deutsch</td><td>Oberfläche und Support auf Deutsch</td><td>Vorstand</td></tr>
-    </tbody>
-  </table>
+  <h2>Wer bei den gesetzten Haken noch dabei ist</h2>
+  <div id="ko-result"></div>
 
   <h2>Gewichte, die der Vorstand im Raum setzt</h2>
-  <p class="muted">Vorschlag für den Start. Jede Zeile ändert sich in Fünferschritten. Die engere Wahl folgt der Gewichtung und ersetzt keine Testpunkte. Stand der Produktlage: 16. Oktober 2026, aus öffentlichen Angaben, ohne eigene Tests.</p>
+  <p class="muted">Die Gewichte gelten nur noch für Angebote, die oben alle gesetzten K.O.-Kriterien bestehen. Jede Zeile ändert sich in Fünferschritten. Das ersetzt keine Testpunkte.</p>
   <div class="presets" id="presets"></div>
   <p id="bar-label" class="muted"></p>
   <div class="bar" id="bar" aria-hidden="true"></div>
@@ -154,6 +139,186 @@
   <footer>Öffentliche Ansicht für den TV Neuenburg 1926 e.V. Gewichte bleiben in diesem Browser und werden nicht an einen Server gesendet.</footer>
 </main>
 <script>
+const OFFERS = [
+  ["ledenboek", "Ledenboek"],
+  ["orgo", "Orgo"],
+  ["easyverein", "easyVerein"],
+  ["webling", "Webling"],
+  ["campai", "campai"],
+  ["digitalmembers", "DigitalMembers"],
+  ["sewobe", "SEWOBE"],
+  ["vereinonline", "VereinOnline"],
+  ["kurabu", "Kurabu"],
+  ["bundaris", "Bundaris"]
+];
+const KO = [
+  {
+    id: "browser",
+    title: "Nur im Browser",
+    who: "IT",
+    examples: [
+      "Kasse und Geschäftsstelle arbeiten gleichzeitig, eine am Küchentisch, eine im Vereinsheim, ohne dass eine Datei hin und her geschickt wird.",
+      "Auf dem Vereinsrechner im Sportheim ist nichts zu installieren. Ein aktueller Browser reicht, auch wenn dort kein Windows-Programm wie ProWinner läuft.",
+      "Die Abteilungsleitung Handball ändert eine Adresse am Handy, während die Kasse den Beitragslauf vorbereitet.",
+      "Fällt ein Laptop aus, sind Mitglieder und Mandate nicht auf dessen Festplatte gefangen."
+    ],
+    results: {
+      ledenboek: [true, "Webanwendung, Server bei Hetzner in Deutschland."],
+      orgo: [true, "Webanwendung, Daten in der EU."],
+      easyverein: [true, "Cloud-Anwendung mit Browser und App."],
+      webling: [true, "Läuft im Browser, ausdrücklich ohne eigene App."],
+      campai: [true, "Cloud für Sportvereine, dazu eine Vereinsapp."],
+      digitalmembers: [true, "Webanwendung aus der Schweiz."],
+      sewobe: [true, "Online-VereinsMANAGER mit Portal."],
+      vereinonline: [true, "Vereinssoftware im Browser, SEPA auch per Online-Banking."],
+      kurabu: [true, "Cloud und Vereinsapp für größere Sportvereine."],
+      bundaris: [true, "Webanwendung mit Mitgliederportal."]
+    }
+  },
+  {
+    id: "sepa",
+    title: "SEPA-Lastschrift",
+    who: "Kasse",
+    examples: [
+      "Die Gläubiger-ID des Vereins ist hinterlegt. Ohne sie nimmt die Bank keine Datei an.",
+      "Ein Mandat hat Datum, Mandatsreferenz und IBAN. Ein Familienzahler kann für mehrere Personen einziehen.",
+      "Der Quartalslauf erzeugt eine PAIN.008-Datei. Die Kasse lädt sie im Online-Banking der Hausbank hoch, das Geld geht auf das Vereinskonto.",
+      "Erst- und Folgelastschrift werden unterschieden. Eine Datei für 1400 Mitglieder darf nicht an einem falschen Sequenztyp scheitern.",
+      "Kommt eine Lastschrift zurück, ist das Mandat erkennbar, die Rechnung wieder offen, eine Mahngebühr möglich. Beispiel: eine Familie aus Turnen und Handball, deren Konto nicht gedeckt ist."
+    ],
+    results: {
+      ledenboek: [true, "SEPA-Datei für die eigene Bank und digitales Mandat. Rücklastschrift über den Kontoauszug, kein eigener Assistent belegt."],
+      orgo: [false, "Zahlungen über Stripe. PAIN.008, Mandatsreferenz und Rücklastschrift nicht belegt."],
+      easyverein: [true, "Sammellastschrift als SEPA Pain XML, Gläubiger-ID, Upload im Online-Banking, Rücklastschrift-Assistent."],
+      webling: [true, "SEPA-Lastschrift für Deutschland und Österreich. Den Umgang mit einer Rücklastschrift im Test prüfen."],
+      campai: [true, "SEPA-Lastschrift mit Rücklastschrift-Assistent und automatischer Gebührenbuchung."],
+      digitalmembers: [false, "Ausrichtung auf QR-Rechnung und TWINT. Eine deutsche PAIN.008-Datei ist nicht belegt."],
+      sewobe: [false, "Beitragspositionen sind beschrieben. PAIN.008, Mandat und Rücklastschrift sind in den gesichteten Seiten nicht belegt."],
+      vereinonline: [true, "SEPA-XML im PAIN-Format oder Übergabe per HBCI/FinTS, Gläubiger-ID im Profil. Lastschriften werden immer als erstmalig gekennzeichnet."],
+      kurabu: [true, "SEPA-XML ab Standard 2.7, vorhandene Mandatsreferenzen bleiben beim Import, Rücklastschrift über den Kontoauszug, mehrstufige Mahnung."],
+      bundaris: [true, "pain.008, Erst- und Folgelastschrift getrennt, Familienzahler, Abgleich mit einem CAMT-Kontoauszug."]
+    }
+  },
+  {
+    id: "sparten",
+    title: "Mehrspartenverein",
+    who: "Geschäftsstelle",
+    examples: [
+      "Eine Person ist in Turnen und in Handball. Beide Abteilungen sehen sie, der Beitrag kann je Sparte anders sein.",
+      "Aktiv, passiv, Jugend und Ehrenmitglied sind verschiedene Beitragssätze, nicht nur ein einziges Feld „Mitglied“.",
+      "Ein Haushalt: zwei Kinder im Volleyball der Abteilung Turnen, ein Elternteil zahlt einen Familienbeitrag.",
+      "Die Abteilung Tennis darf ihre Mitglieder pflegen, ohne die Beitragsklasse von Judo zu ändern.",
+      "Die Bestandsmeldung an den Badischen Sportbund zählt Personen je Sparte, ohne Doppelte als zwei Personen zu melden, wenn der Verband das so verlangt."
+    ],
+    results: {
+      ledenboek: [true, "Gruppen und Ausschüsse, dazu eine Beschreibung für Mehrspartenvereine. Einen Familienzahler über zwei Abteilungen im Test anlegen."],
+      orgo: [true, "Familien, Gruppen und Sektionen sind dokumentiert. Ob das den Abteilungen eines Turnvereins entspricht, im Test prüfen."],
+      easyverein: [true, "Gruppen, Beitrag je Mitglied oder Gruppe, Bestandserhebung für Sportvereine."],
+      webling: [true, "Mitgliedergruppen und Export im LSB/DOSB-Format. Den Familienzahler im Test anlegen."],
+      campai: [true, "Für Sportvereine gebaut, Beiträge hängen am Mitglied. Mehrere Abteilungen und einen Familienzahler im Test anlegen."],
+      digitalmembers: [false, "Gruppen sind naheliegend, mehrere deutsche Sportabteilungen und ein Familienzahler sind nicht belegt."],
+      sewobe: [false, "Kontakte und Beiträge sind beschrieben. Mehrere Abteilungen je Mitglied und ein Familienzahler sind nicht belegt."],
+      vereinonline: [true, "Mitglieder, flexible Listen und Beitrag je Mitglied oder Gruppe. Abteilungen als Gruppen im Test anlegen."],
+      kurabu: [true, "Abteilungen, Teams und Beitragsgruppen. Mehrere Sparten an einer Person im Test prüfen."],
+      bundaris: [true, "Beitragsstufen je Sparte und ein Familien-Verbund mit einem Zahler, als Summe oder als Pauschale."]
+    }
+  },
+  {
+    id: "rollen",
+    title: "Getrennte Rollen",
+    who: "Vorstand",
+    examples: [
+      "Der Gesamtvorstand sieht alle Abteilungen. Die Abteilungsleitung Schwimmen sieht nicht die IBAN der Tennis-Mitglieder.",
+      "Die Kasse sieht Mandate, offene Beiträge und Mahnungen. Die Schriftführung sieht Protokolle, nicht die komplette Kontoliste.",
+      "Ein Mitglied im Portal ändert die eigene Adresse und sieht die eigenen Rechnungen, nicht die der anderen.",
+      "Nach der Wahl übernimmt die neue Kassenwartin den Zugang, ohne das Passwort der Vorgängerin weiterzubenutzen.",
+      "Ein API-Schlüssel für eine Auskunft darf lesen, aber keinen Beitragslauf starten."
+    ],
+    results: {
+      ledenboek: [true, "Rollen folgen der Funktion. Die KI-Anbindung sieht nur das, was die angemeldete Person sehen darf."],
+      orgo: [true, "Rollen im Mitgliederbestand, API-Schlüssel je Bereich nur lesen oder auch schreiben."],
+      easyverein: [true, "Administratorgruppen mit abgegrenzten Rechten. Ein API-Schlüssel erbt genau diese Gruppe."],
+      webling: [true, "Beliebig viele Benutzer. Ob eine Abteilungsleitung nur die eigene Sparte sieht, im Test prüfen."],
+      campai: [true, "Unbegrenzte Benutzer und eine Mitglieder-App. Die Trennung Vorstand gegen Abteilung im Test prüfen."],
+      digitalmembers: [true, "API-Schlüssel geben nur freigegebene Bereiche frei. Vereinsrollen im Test prüfen."],
+      sewobe: [true, "Mitgliederportal und OAuth für Drittanwendungen. Eine eigene Abteilungsrolle ist nicht belegt."],
+      vereinonline: [true, "Rechte hängen an der Rolle, zum Beispiel Mitglieder nur lesen oder auch ändern."],
+      kurabu: [true, "API-Schlüssel mit eigenen Berechtigungsstufen. Die Sicht einer Abteilungsleitung im Test prüfen."],
+      bundaris: [true, "Rollen und, für größere Organisationen, Sub-Mandanten."]
+    }
+  },
+  {
+    id: "datenschutz",
+    title: "Datenschutz",
+    who: "Vorstand",
+    examples: [
+      "Vor dem Import echter Mitglieder liegt ein Auftragsverarbeitungsvertrag vor, nicht erst eine Fußnote in der Datenschutzerklärung.",
+      "Die Server stehen in der EU oder in der Schweiz. Die Schweiz hat einen Angemessenheitsbeschluss, der Vertrag nennt den Ort trotzdem.",
+      "Ein ausgetretenes Mitglied wird gelöscht oder gesperrt, einschließlich Portalzugang. Die Buchungsbelege bleiben, soweit die Aufbewahrung das verlangt.",
+      "Auf eine Auskunftsanfrage ist benennbar, welche Abteilung welche Daten hat. Beispiel: die Abteilung Tennis und die Beitragshistorie.",
+      "Die Mitgliederliste wird nicht für Werbung des Anbieters verwendet."
+    ],
+    results: {
+      ledenboek: [true, "Server bei Hetzner in Deutschland, DSGVO genannt. Den AVV vor dem Echtimport lesen."],
+      orgo: [true, "Daten in der EU, DSGVO genannt. Den AVV im Vertrag festmachen."],
+      easyverein: [true, "Hosting in Deutschland, genannt werden Nürnberg, Falkenstein und Frankfurt."],
+      webling: [true, "Rechenzentrum in der Schweiz. AVV als Zusatzvereinbarung, Angemessenheitsbeschluss liegt vor."],
+      campai: [true, "Hosting Deutschland angegeben, der Rechenzentrumsbetreiber ist nicht belegt. AVV prüfen."],
+      digitalmembers: [true, "Schweiz, ausgerichtet am schweizerischen Datenschutzgesetz. Für deutsche Mitglieder den AVV prüfen."],
+      sewobe: [true, "Deutscher Anbieter. Serverstandort und AVV stehen in den gesichteten Seiten nicht konkret und gehören in den Vertrag."],
+      vereinonline: [true, "Hosting in Deutschland bei Ionos. Selbst-Hosting nur in einer Plus-Version."],
+      kurabu: [true, "Deutscher Anbieter. AVV und Serverstandort im Vertrag festmachen, öffentlich nicht genauer belegt."],
+      bundaris: [true, "Anbieter aus Deutschland, DSGVO-Export der Stammdaten beschrieben. AVV vor dem Import lesen."]
+    }
+  },
+  {
+    id: "ausstieg",
+    title: "Ausstieg mit den Daten",
+    who: "IT",
+    examples: [
+      "Am Vertragsende kommen Mitglieder, Abteilungen, Mandate und Belege als Datei heraus, nicht nur als PDF zum Abtippen.",
+      "Die Mandatsreferenz bleibt erhalten, damit ein späterer Anbieter nicht alle Einzüge als Ersteinzug kennzeichnet.",
+      "Ein Probelauf vor der Unterschrift: 30 anonymisierte Personen hinein, wieder hinaus, und die Abteilungen stimmen noch.",
+      "Buchungsdaten lassen sich an die Kasse oder an DATEV geben, ohne im Altprogramm gefangen zu sein.",
+      "Ist der Anbieter nicht erreichbar, liegt aus dem Vertrag hervor, in welcher Frist der Export kommt."
+    ],
+    results: {
+      ledenboek: [true, "Eine Sicherungsdatei des ganzen Vereins, inklusive Anhänge, und die Buchhaltung als XAF."],
+      orgo: [true, "Die API liest Mitglieder, Zahlungen und Events. Das Dateiformat für einen kompletten Ausstieg im Test sichern."],
+      easyverein: [true, "Eine Exportfunktion ist vorgesehen. Die API-Beschreibung verweist für komplette Abzüge auf diesen Export, nicht auf die Schnittstelle."],
+      webling: [true, "Export und API-Abruf der Mitglieder. Ob Mandate und Belege vollständig dabei sind, im Test prüfen."],
+      campai: [false, "Ein vollständiger Export von Mitgliedern, Mandaten und Belegen bei Vertragsende ist nicht belegt."],
+      digitalmembers: [true, "Die API kann Mitglieder, Rechnungen und Belege lesen. Die Ausstiegsdatei im Test einmal erzeugen."],
+      sewobe: [false, "Ein vollständiger Export bei Vertragsende ist in den gesichteten Seiten nicht belegt."],
+      vereinonline: [false, "Exporte für SEPA und Buchhaltung sind belegt. Ein Gesamtabzug von Mitgliedern, Mandaten und Belegen am Vertragsende nicht."],
+      kurabu: [false, "Import aus Excel ist beschrieben. Ein vollständiger Export am Vertragsende nicht."],
+      bundaris: [false, "Excel, CSV und DATEV für Mitglieder und Buchungen. Ein zugesicherter Gesamtabzug am Vertragsende nicht."]
+    }
+  },
+  {
+    id: "deutsch",
+    title: "Deutsch",
+    who: "Vorstand",
+    examples: [
+      "Menüs, Beitragsarten, Mahntexte und die SEPA-Begriffe sind auf Deutsch, nicht nur die Startseite.",
+      "Die Kasse erreicht den Support auf Deutsch, per Mail oder Telefon, ohne ein Ticket auf Englisch schreiben zu müssen.",
+      "Hilfetexte zum Lastschriftlauf erklären Gläubiger-ID, Vorlaufzeit und Rücklastschrift auf Deutsch.",
+      "Briefe und Mails an Mitglieder kommen mit deutschen Vorlagen heraus, inklusive der Vorabankündigung."
+    ],
+    results: {
+      ledenboek: [true, "Deutsche Oberfläche. Herkunft und Buchhaltungslogik sind niederländisch."],
+      orgo: [true, "Deutsche Seiten vorhanden. Fachbegriffe der deutschen Vereinskasse im Test gegenlesen."],
+      easyverein: [true, "Deutscher Anbieter, Oberfläche und Hilfe auf Deutsch."],
+      webling: [true, "Deutsche Oberfläche, Anbieter in der Schweiz."],
+      campai: [true, "Deutsche Oberfläche für Sportvereine."],
+      digitalmembers: [true, "Deutsch, daneben Französisch, Italienisch und Englisch. Fachsprache der Schweiz, etwa QR-Rechnung."],
+      sewobe: [true, "Deutsche Oberfläche."],
+      vereinonline: [true, "Deutsche Oberfläche und deutsche Hilfe."],
+      kurabu: [true, "Deutsche Oberfläche."],
+      bundaris: [true, "Deutsche Oberfläche."]
+    }
+  }
+];
 const CRITERIA = [
   { key: "kasse", label: "Beiträge und Kasse", color: "#1d4ed8" },
   { key: "bedienung", label: "Bedienung im Ehrenamt", color: "#15803d" },
@@ -173,38 +338,78 @@ const PRESETS = [
 function same(a, b) {
   return CRITERIA.every((item) => a[item.key] === b[item.key]);
 }
-function shortlist(weights) {
-  if (weights.api >= 25) return "easyVerein, Webling und Ledenboek";
-  return "easyVerein, Webling und campai";
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
 }
-function consequences(weights) {
+function offerName(id) {
+  return OFFERS.find((item) => item[0] === id)[1];
+}
+function activeKos() {
+  return KO.filter((item) => koOn[item.id]);
+}
+function knockouts(id) {
+  return activeKos().filter((item) => !item.results[id][0]);
+}
+function survivors() {
+  return OFFERS.filter((item) => knockouts(item[0]).length === 0).map((item) => item[0]);
+}
+function shortlistIds(weights) {
+  const alive = new Set(survivors());
+  const order = weights.api >= 25
+    ? ["easyverein", "webling", "ledenboek", "campai", "kurabu", "bundaris", "vereinonline", "orgo", "digitalmembers", "sewobe"]
+    : ["easyverein", "webling", "campai", "kurabu", "bundaris", "vereinonline", "ledenboek", "orgo", "digitalmembers", "sewobe"];
+  return order.filter((id) => alive.has(id)).slice(0, 3);
+}
+function consequences(weights, ids) {
+  const names = ids.map(offerName);
   const lines = [];
-  if (weights.api >= 25) {
-    lines.push("Schnittstellen wiegen schwer. In der engeren Wahl bleiben easyVerein und Webling, weil sich darauf ein eigenes MCP bauen lässt, und Ledenboek, weil die KI-Anbindung schon existiert. Kurabu und Bundaris fallen heraus. Orgo bleibt nur im Raum, wenn der Vorstand Kartenzahlung über Stripe anstelle einer SEPA-Datei akzeptiert.");
-  } else if (weights.api <= 10) {
-    lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Die engere Wahl richtet sich nach Kasse, Abteilungen und Bedienung: easyVerein, Webling und campai. Ledenboek kommt dazu, sobald SEPA-Datei und Bestandsmeldung im selben Test bestehen.");
-  } else {
-    lines.push("Die Schnittstelle bleibt ein festes Kriterium mit mittlerem Gewicht. Geprüft werden easyVerein, Webling und campai. Ledenboek liegt als MCP-Pilot daneben und steigt auf, wenn der Vorstand das Gewicht für Automatisierung anhebt.");
+  if (!names.length) {
+    lines.push("Mit den gesetzten Haken bleibt kein Angebot übrig. Mindestens einen Haken herausnehmen oder die Belege im Testkonto nachziehen.");
+    return lines;
   }
-  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Punkte gibt es für einen Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung an einem Auszug von echten, anonymisierten Fällen.");
+  lines.push("Die engere Wahl steht nur aus den Angeboten, die alle gesetzten K.O.-Kriterien bestehen: " + names.join(", ") + ".");
+  if (weights.api >= 25 && ids.includes("ledenboek")) lines.push("Die Schnittstelle wiegt schwer. Ledenboek bleibt dabei, weil die KI-Anbindung schon existiert. easyVerein und Webling bleiben dabei, solange sie die K.O.-Liste bestehen, weil sich darauf ein eigenes MCP bauen lässt.");
+  if (weights.api <= 10) lines.push("Die Automatisierung ist in dieser Gewichtung ein Nebenkriterium. Es entscheiden Kasse, Abteilungen und Bedienung, und nur unter den Verbliebenen.");
+  if (weights.kasse >= 30) lines.push("Der Kassenwart gibt den Ausschlag. Punkte gibt es für einen Lastschriftlauf mit Mandat, Rücklastschrift und Mahnung.");
   if (weights.bedienung >= 30) lines.push("Bedienung zählt erst, nachdem je eine Person aus der Kasse und aus einer Abteilung dieselben Aufgaben ohne IT-Begleitung zu Ende bringt.");
-  if (weights.abteilung >= 20) lines.push("Die Bestandsmeldung an den Badischen Sportbund ist eine Pflichtaufgabe im Test. Ein CSV-Export erhält Teilpunkte, wenn die Geschäftsstelle den weiteren Weg selbst tragen kann.");
-  if (weights.datenschutz >= 20) lines.push("Auftragsverarbeitung, Serverstandort und ein vollständiger Export am Vertragsende werden als K.O.-Kriterium behandelt. Webling bleibt prüfbar, das Hosting in der Schweiz wird dabei ausdrücklich mitbeschlossen.");
+  if (weights.abteilung >= 20) lines.push("Die Bestandsmeldung an den Badischen Sportbund ist eine Pflichtaufgabe im Test.");
   lines.push("Die Kosten laufen als eigene Rechnung über vier Jahre neben der Punktzahl: Lizenzen, einmalige Übernahme, Schulung, Gebühren der Zahlungswege und der Aufwand für einen späteren Wechsel.");
   return lines;
 }
 
 let weights = Object.assign({}, PRESETS[0].weights);
+let koOn = Object.fromEntries(KO.map((item) => [item.id, true]));
 try {
   const saved = JSON.parse(localStorage.getItem("tvn-weights") || "null");
   if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
+  const savedKo = JSON.parse(localStorage.getItem("tvn-ko") || "null");
+  if (savedKo && KO.every((item) => typeof savedKo[item.id] === "boolean")) koOn = savedKo;
 } catch (_) {}
 
 function render() {
   const sum = CRITERIA.reduce((total, item) => total + weights[item.key], 0);
   const active = PRESETS.find((preset) => same(preset.weights, weights));
-  const names = shortlist(weights);
+  const ids = shortlistIds(weights);
+  const names = ids.map(offerName).join(", ");
   localStorage.setItem("tvn-weights", JSON.stringify(weights));
+  localStorage.setItem("tvn-ko", JSON.stringify(koOn));
+
+  document.getElementById("ko").innerHTML = KO.map((item) => {
+    const dropped = OFFERS.filter((offer) => koOn[item.id] && !item.results[offer[0]][0]).map((offer) => offer[1]);
+    const dropText = koOn[item.id]
+      ? (dropped.length ? "Damit fallen raus: " + dropped.join(", ") + "." : "Damit fällt niemand zusätzlich raus.")
+      : "Haken ist aus. Dieses Kriterium sortiert gerade niemanden aus.";
+    return `<section class="ko"><label class="head"><input type="checkbox" data-ko="${item.id}" ${koOn[item.id] ? "checked" : ""}> ${escapeHtml(item.title)} <span class="muted">· ${escapeHtml(item.who)}</span></label><ul>${item.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}</ul><p class="drop muted">${escapeHtml(dropText)}</p></section>`;
+  }).join("");
+
+  const rows = OFFERS.map((offer) => {
+    const reasons = knockouts(offer[0]);
+    if (!reasons.length) return `<tr class="stay"><td>${escapeHtml(offer[1])}</td><td>dabei</td><td>Besteht alle gesetzten K.O.-Kriterien.</td></tr>`;
+    const why = reasons.map((item) => item.title + ": " + item.results[offer[0]][1]).join(" ");
+    return `<tr class="out"><td>${escapeHtml(offer[1])}</td><td>raus</td><td>${escapeHtml(why)}</td></tr>`;
+  }).join("");
+  const aliveCount = survivors().length;
+  document.getElementById("ko-result").innerHTML = `<p>${aliveCount} von 10 bleiben in der weiteren Wahl. ${10 - aliveCount} sind mit den gesetzten Haken raus und stehen weiter in der Tabelle.</p><table><thead><tr><th>Angebot</th><th>Stand</th><th>Woran es liegt</th></tr></thead><tbody>${rows}</tbody></table>`;
 
   document.getElementById("presets").innerHTML = PRESETS.map((preset) =>
     `<button type="button" data-preset="${preset.id}" aria-pressed="${active && active.id === preset.id}">${preset.label}</button>`
@@ -217,10 +422,19 @@ function render() {
   document.getElementById("weights").innerHTML = CRITERIA.map((item) =>
     `<div class="weight"><span>${item.label}</span><button type="button" data-key="${item.key}" data-delta="-5" ${weights[item.key] <= 0 ? "disabled" : ""}>−5</button><b>${weights[item.key]}</b><button type="button" data-key="${item.key}" data-delta="5" ${weights[item.key] >= 40 ? "disabled" : ""}>+5</button></div>`
   ).join("");
-  document.getElementById("shortlist").innerHTML = `<strong>${names}</strong>`;
-  document.getElementById("consequences").innerHTML = consequences(weights).map((line) => `<p>${line}</p>`).join("");
-  document.getElementById("beschluss").textContent = `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`;
+  document.getElementById("shortlist").innerHTML = `<strong>${names || "Niemand"}</strong>`;
+  document.getElementById("consequences").innerHTML = consequences(weights, ids).map((line) => `<p>${escapeHtml(line)}</p>`).join("");
+  document.getElementById("beschluss").textContent = names
+    ? `Der Vorstand beauftragt die Prüfung von ${names}. Ein Kauf wird in dieser Sitzung nicht beschlossen. Testkonten bleiben im kostenlosen Probezeitraum. Bericht in der folgenden Sitzung, mit Punktzahl je Kriterium und der Vier-Jahres-Rechnung.`
+    : "Mit den gesetzten K.O.-Kriterien bleibt kein Angebot übrig. Der Vorstand ändert die Haken, bevor ein Prüfauftrag beschlossen wird.";
 }
+
+document.body.addEventListener("change", (event) => {
+  const box = event.target.closest("input[data-ko]");
+  if (!box) return;
+  koOn = Object.assign({}, koOn, { [box.dataset.ko]: box.checked });
+  render();
+});
 
 document.body.addEventListener("click", (event) => {
   const button = event.target.closest("button");
