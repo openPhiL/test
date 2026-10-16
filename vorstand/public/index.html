@@ -71,6 +71,10 @@
     .ko ul { margin: 8px 0 0 28px; padding: 0; }
     .ko li { margin: 0 0 4px; }
     .ko .drop { margin: 10px 0 0 28px; }
+    .role-jump { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 20px; }
+    .role-block { margin: 0 0 28px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 8px; }
+    .check input { margin-top: 4px; }
     tr.out { background: #f5f5f4; }
     footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
     @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
@@ -87,12 +91,17 @@
   <p class="muted">TV Neuenburg 1926 e.V. Diese Seite ist öffentlich und braucht keine Anmeldung. Die Sitzung setzt Gewichte und benennt Testkonten. Punktzahlen entstehen erst, wenn Kasse, eine Abteilungsleitung und die IT dieselben Aufgaben durchgespielt haben.</p>
 
   <div class="note">
-    <strong>Erster Schritt ist die K.O.-Liste.</strong>
-    Ein Haken bedeutet: dieses Kriterium gilt. Ein Angebot ohne belegtes Bestehen fällt aus der weiteren Wahl. Es verschwindet nicht, der Grund steht in der Tabelle direkt darunter. Haken wegnehmen holt es zurück. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
+    <strong>Erster Schritt sind drei Checklisten.</strong>
+    Kasse, Geschäftsstelle und IT haken jeweils ab, was für sie gilt. Solange in einem Kriterium mindestens ein Haken steht, sortiert es Angebote aus. Die fallen nicht weg: die Tabelle zeigt den Grund. Alle Haken eines Kriteriums herausnehmen holt die Angebote zurück. Stand der Belege: 16. Oktober 2026, öffentliche Anbieterangaben, noch ohne eigenes Testkonto.
   </div>
 
-  <h2>Erster Schritt: K.O.-Liste</h2>
+  <h2>Erster Schritt: drei Checklisten</h2>
   <p>„Nicht belegt“ heißt hier nicht „kann das Programm das nicht“. Für ein K.O. reicht das trotzdem zum Aussortieren, bis ein Testkonto das Gegenteil zeigt.</p>
+  <div class="role-jump">
+    <a href="#liste-kasse">Checkliste Kasse</a>
+    <a href="#liste-geschaeft">Checkliste Geschäftsstelle</a>
+    <a href="#liste-it">Checkliste IT</a>
+  </div>
   <div id="ko"></div>
 
   <h2>Wer bei den gesetzten Haken noch dabei ist</h2>
@@ -155,7 +164,7 @@ const KO = [
   {
     id: "browser",
     title: "Nur im Browser",
-    who: "IT",
+    role: "it",
     examples: [
       "Kasse und Geschäftsstelle arbeiten gleichzeitig, eine am Küchentisch, eine im Vereinsheim, ohne dass eine Datei hin und her geschickt wird.",
       "Auf dem Vereinsrechner im Sportheim ist nichts zu installieren. Ein aktueller Browser reicht, auch wenn dort kein Windows-Programm wie ProWinner läuft.",
@@ -178,7 +187,7 @@ const KO = [
   {
     id: "sepa",
     title: "SEPA-Lastschrift",
-    who: "Kasse",
+    role: "kasse",
     examples: [
       "Die Gläubiger-ID des Vereins ist hinterlegt. Ohne sie nimmt die Bank keine Datei an.",
       "Ein Mandat hat Datum, Mandatsreferenz und IBAN. Ein Familienzahler kann für mehrere Personen einziehen.",
@@ -202,7 +211,7 @@ const KO = [
   {
     id: "sparten",
     title: "Mehrspartenverein",
-    who: "Geschäftsstelle",
+    role: "geschaeft",
     examples: [
       "Eine Person ist in Turnen und in Handball. Beide Abteilungen sehen sie, der Beitrag kann je Sparte anders sein.",
       "Aktiv, passiv, Jugend und Ehrenmitglied sind verschiedene Beitragssätze, nicht nur ein einziges Feld „Mitglied“.",
@@ -226,7 +235,7 @@ const KO = [
   {
     id: "rollen",
     title: "Getrennte Rollen",
-    who: "Vorstand",
+    role: "geschaeft",
     examples: [
       "Der Gesamtvorstand sieht alle Abteilungen. Die Abteilungsleitung Schwimmen sieht nicht die IBAN der Tennis-Mitglieder.",
       "Die Kasse sieht Mandate, offene Beiträge und Mahnungen. Die Schriftführung sieht Protokolle, nicht die komplette Kontoliste.",
@@ -250,7 +259,7 @@ const KO = [
   {
     id: "datenschutz",
     title: "Datenschutz",
-    who: "Vorstand",
+    role: "it",
     examples: [
       "Vor dem Import echter Mitglieder liegt ein Auftragsverarbeitungsvertrag vor, nicht erst eine Fußnote in der Datenschutzerklärung.",
       "Die Server stehen in der EU oder in der Schweiz. Die Schweiz hat einen Angemessenheitsbeschluss, der Vertrag nennt den Ort trotzdem.",
@@ -274,7 +283,7 @@ const KO = [
   {
     id: "ausstieg",
     title: "Ausstieg mit den Daten",
-    who: "IT",
+    role: "it",
     examples: [
       "Am Vertragsende kommen Mitglieder, Abteilungen, Mandate und Belege als Datei heraus, nicht nur als PDF zum Abtippen.",
       "Die Mandatsreferenz bleibt erhalten, damit ein späterer Anbieter nicht alle Einzüge als Ersteinzug kennzeichnet.",
@@ -298,7 +307,7 @@ const KO = [
   {
     id: "deutsch",
     title: "Deutsch",
-    who: "Vorstand",
+    role: "geschaeft",
     examples: [
       "Menüs, Beitragsarten, Mahntexte und die SEPA-Begriffe sind auf Deutsch, nicht nur die Startseite.",
       "Die Kasse erreicht den Support auf Deutsch, per Mail oder Telefon, ohne ein Ticket auf Englisch schreiben zu müssen.",
@@ -344,8 +353,19 @@ function escapeHtml(value) {
 function offerName(id) {
   return OFFERS.find((item) => item[0] === id)[1];
 }
+const ROLES = [
+  ["kasse", "Kasse", "liste-kasse"],
+  ["geschaeft", "Geschäftsstelle", "liste-geschaeft"],
+  ["it", "IT", "liste-it"]
+];
+function checkKey(criterionId, index) {
+  return criterionId + ":" + index;
+}
+function criterionOn(item) {
+  return item.examples.some((_, index) => checks[checkKey(item.id, index)]);
+}
 function activeKos() {
-  return KO.filter((item) => koOn[item.id]);
+  return KO.filter(criterionOn);
 }
 function knockouts(id) {
   return activeKos().filter((item) => !item.results[id][0]);
@@ -378,12 +398,13 @@ function consequences(weights, ids) {
 }
 
 let weights = Object.assign({}, PRESETS[0].weights);
-let koOn = Object.fromEntries(KO.map((item) => [item.id, true]));
+let checks = {};
+KO.forEach((item) => item.examples.forEach((_, index) => { checks[checkKey(item.id, index)] = true; }));
 try {
   const saved = JSON.parse(localStorage.getItem("tvn-weights") || "null");
   if (saved && CRITERIA.every((item) => Number.isInteger(saved[item.key]))) weights = saved;
-  const savedKo = JSON.parse(localStorage.getItem("tvn-ko") || "null");
-  if (savedKo && KO.every((item) => typeof savedKo[item.id] === "boolean")) koOn = savedKo;
+  const savedChecks = JSON.parse(localStorage.getItem("tvn-checks") || "null");
+  if (savedChecks && Object.keys(checks).every((key) => typeof savedChecks[key] === "boolean")) checks = savedChecks;
 } catch (_) {}
 
 function render() {
@@ -392,14 +413,22 @@ function render() {
   const ids = shortlistIds(weights);
   const names = ids.map(offerName).join(", ");
   localStorage.setItem("tvn-weights", JSON.stringify(weights));
-  localStorage.setItem("tvn-ko", JSON.stringify(koOn));
+  localStorage.setItem("tvn-checks", JSON.stringify(checks));
 
-  document.getElementById("ko").innerHTML = KO.map((item) => {
-    const dropped = OFFERS.filter((offer) => koOn[item.id] && !item.results[offer[0]][0]).map((offer) => offer[1]);
-    const dropText = koOn[item.id]
-      ? (dropped.length ? "Damit fallen raus: " + dropped.join(", ") + "." : "Damit fällt niemand zusätzlich raus.")
-      : "Haken ist aus. Dieses Kriterium sortiert gerade niemanden aus.";
-    return `<section class="ko"><label class="head"><input type="checkbox" data-ko="${item.id}" ${koOn[item.id] ? "checked" : ""}> ${escapeHtml(item.title)} <span class="muted">· ${escapeHtml(item.who)}</span></label><ul>${item.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}</ul><p class="drop muted">${escapeHtml(dropText)}</p></section>`;
+  document.getElementById("ko").innerHTML = ROLES.map(([roleId, roleLabel, anchor]) => {
+    const groups = KO.filter((item) => item.role === roleId).map((item) => {
+      const onCount = item.examples.filter((_, index) => checks[checkKey(item.id, index)]).length;
+      const dropped = OFFERS.filter((offer) => criterionOn(item) && !item.results[offer[0]][0]).map((offer) => offer[1]);
+      const dropText = onCount
+        ? (dropped.length ? "Solange mindestens ein Haken steht, fallen daran raus: " + dropped.join(", ") + "." : "Die gesetzten Haken sortieren hier niemanden aus.")
+        : "Alle Haken sind aus. Dieses Kriterium sortiert gerade niemanden aus.";
+      const items = item.examples.map((example, index) => {
+        const key = checkKey(item.id, index);
+        return `<label class="check"><input type="checkbox" data-check="${key}" ${checks[key] ? "checked" : ""}><span>${escapeHtml(example)}</span></label>`;
+      }).join("");
+      return `<section class="ko"><h3>${escapeHtml(item.title)} <span class="muted">${onCount} von ${item.examples.length}</span></h3>${items}<p class="drop muted">${escapeHtml(dropText)}</p></section>`;
+    }).join("");
+    return `<section class="role-block" id="${anchor}"><h2>Checkliste ${escapeHtml(roleLabel)}</h2>${groups}</section>`;
   }).join("");
 
   const rows = OFFERS.map((offer) => {
@@ -430,9 +459,9 @@ function render() {
 }
 
 document.body.addEventListener("change", (event) => {
-  const box = event.target.closest("input[data-ko]");
+  const box = event.target.closest("input[data-check]");
   if (!box) return;
-  koOn = Object.assign({}, koOn, { [box.dataset.ko]: box.checked });
+  checks = Object.assign({}, checks, { [box.dataset.check]: box.checked });
   render();
 });
 
